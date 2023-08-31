@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -16,14 +17,16 @@
         android:src="@drawable/star"
         android:importantForAccessibility="no"
         android:layout_gravity="center"
+        android:background="@drawable/starts_background_outline"
         android:layout_marginStart="10dp"
         android:layout_marginBottom="7dp"
         android:layout_marginTop="7dp"/>
 
     <TextView
-        android:id="@+id/starsCount"
+        android:id="@+id/starsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/starts_background_outline"
         android:fontFamily="@font/sf_pro_display_bold_500"
         android:textColor="@color/stars_text"
         android:textSize="16sp"
