@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import by.bashlikovvv.hotelreservation.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ReservationFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

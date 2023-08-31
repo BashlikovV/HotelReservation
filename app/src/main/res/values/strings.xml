@@ -20,4 +20,6 @@
     <string name="madinat_makadi_safaga_road_makadi_bay">Madinat Makadi, Safaga Road, Makadi Bay, Египет</string>
     <string name="open_content">open content</string>
     <string name="_5">5 Превосходно</string>
+
+    <string name="from_string">"от %1$s"</string>
 </resources>
