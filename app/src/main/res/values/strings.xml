@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">HotelReservation</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hotel_string">Отель</string>
+    <string name="hotel_name">Hotel Name</string>
+    <string name="long_long_long_hotel_location">Long Long Long Hotel Location</string>
+    <string name="hotel_price">от 134 673 ₽</string>
+    <string name="additional_title">за тур с перелётом</string>
+    <string name="about_hotel">Об отеле</string>
+    <string name="vip_18">Отель VIP-класса с собственными гольф полями. Высокий уровнь сервиса. Рекомендуем для респектабельного отдыха. Отель принимает гостей от 18 лет!</string>
+    <string name="conveniences">Удобства</string>
+    <string name="conveniences_description">Самое необходимое</string>
+    <string name="included">Что включено</string>
+    <string name="included_description">Самое необходимое</string>
+    <string name="excluded">Что не включено</string>
+    <string name="excluded_description">Самое необходимое</string>
+    <string name="choose_number">К выбору номера</string>
+    <string name="image_for_presenting_hotel">image for presenting hotel</string>
+    <string name="madinat_makadi_safaga_road_makadi_bay">Madinat Makadi, Safaga Road, Makadi Bay, Египет</string>
+    <string name="open_content">open content</string>
+    <string name="_5">5 Превосходно</string>
 </resources>

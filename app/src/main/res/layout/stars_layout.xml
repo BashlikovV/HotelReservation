@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/starts_background_outline"
+    android:clipToOutline="true"
+    tools:targetApi="s"
+    android:minHeight="29dp"
+    android:minWidth="149dp">
+
+    <ImageView
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/star"
+        android:importantForAccessibility="no"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="7dp"
+        android:layout_marginTop="7dp"/>
+
+    <TextView
+        android:id="@+id/starsCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/sf_pro_display_bold_500"
+        android:textColor="@color/stars_text"
+        android:textSize="16sp"
+        android:lineHeight="19.2dp"
+        android:text="@string/_5"
+        android:layout_gravity="center"
+        android:layout_marginStart="2dp"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginEnd="10dp"/>
+
+</LinearLayout>
