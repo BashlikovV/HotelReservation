@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.chip.Chip xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/usabilityText"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:chipStrokeWidth="0dp"
+    app:chipStartPadding="5dp"
+    app:chipEndPadding="5dp"
+    app:chipCornerRadius="0dp"
+
+    android:backgroundTint="@color/about_hotel_background"
+    app:chipMinTouchTargetSize="30dp"
+    android:checkable="true"
+    tools:targetApi="s"
+    android:fontFamily="@font/sf_pro_display_bold_500"
+    android:textColor="@color/about_hotel_text"
+    android:ellipsize="none"
+    android:paddingVertical="5dp"
+    android:textSize="16sp"
+    android:lineHeight="19.2dp"
+    android:text="@string/_5" />
