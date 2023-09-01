@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">HotelReservation</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hotel_string">Отель</string>
     <string name="hotel_name">Hotel Name</string>
+    <string name="room_name">Стандартный с видом на бассейн или сад</string>
     <string name="long_long_long_hotel_location">Long Long Long Hotel Location</string>
     <string name="hotel_price">от 134 673 ₽</string>
     <string name="additional_title">за тур с перелётом</string>
@@ -22,4 +22,6 @@
     <string name="_5">5 Превосходно</string>
 
     <string name="from_string">"от %1$s"</string>
+    <string name="about_room">Подробнее о номере</string>
+    <string name="additional_about_room">Подробнее о номере</string>
 </resources>
