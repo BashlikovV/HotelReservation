@@ -3,8 +3,11 @@ package by.bashlikovvv.hotelreservation.data.di
 import android.content.Context
 import android.net.ConnectivityManager
 import by.bashlikovvv.hotelreservation.data.remote.HotelApi
+import by.bashlikovvv.hotelreservation.data.remote.RoomsApi
 import by.bashlikovvv.hotelreservation.data.repository.HotelRepository
+import by.bashlikovvv.hotelreservation.data.repository.RoomsRepository
 import by.bashlikovvv.hotelreservation.domain.repository.IHotelRepository
+import by.bashlikovvv.hotelreservation.domain.repository.IRoomsRepository
 import by.bashlikovvv.hotelreservation.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -43,8 +46,14 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideHotelInfoApi(retrofit: Retrofit): HotelApi {
+    fun provideHotelApi(retrofit: Retrofit): HotelApi {
         return retrofit.create(HotelApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRoomsApi(retrofit: Retrofit): RoomsApi {
+        return retrofit.create(RoomsApi::class.java)
     }
 
     @Provides
@@ -58,6 +67,20 @@ class DataModule {
         return HotelRepository(
             cm = connectivityManager,
             hotelApi = hotelApi
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideRoomsRepository(
+        @ApplicationContext context: Context,
+        roomsApi: RoomsApi
+    ): IRoomsRepository {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        return RoomsRepository(
+            cm = connectivityManager,
+            roomsApi = roomsApi
         )
     }
 }
