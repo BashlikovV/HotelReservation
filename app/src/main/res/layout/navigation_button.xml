@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/selectRoomBtn"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="48dp"
+    android:fontFamily="@font/sf_pro_display_bold_500"
+    android:backgroundTint="@color/primary_light"
+    android:layout_marginTop="12dp"
+    android:textSize="16sp"
+    android:textColor="@color/background"
+    android:lineHeight="17.6dp"
+    android:letterSpacing="0.1"
+    android:text="@string/choose_number"
+    tools:targetApi="p" />

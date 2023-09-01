@@ -4,5 +4,5 @@
     <font
         android:font="@font/sf_pro_display_bold"
         android:fontWeight="400"
-        tools:targetApi="o" />
+        tools:targetApi="p" />
 </font-family>
