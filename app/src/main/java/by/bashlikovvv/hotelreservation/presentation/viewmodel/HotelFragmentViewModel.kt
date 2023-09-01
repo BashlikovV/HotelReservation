@@ -26,7 +26,6 @@ class HotelFragmentViewModel @Inject constructor(
     fun loadHotel(id: Long) {
         _updateVisibility.update { OnChange(true) }
         val job = viewModelScope.launch {
-            delay(500)
             _hotel.update { getHotelByIdUseCase.execute(id) }
         }
         job.invokeOnCompletion {

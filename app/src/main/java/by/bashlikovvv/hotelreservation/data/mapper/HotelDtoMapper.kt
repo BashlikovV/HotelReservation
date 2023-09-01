@@ -22,6 +22,6 @@ class HotelDtoMapper : Mapper<HotelDto, Hotel> {
     }
 
     override fun mapToEntity(domain: Hotel): HotelDto {
-        TODO("Not yet implemented")
+        throw UnsupportedOperationException("Not implemented")
     }
 }
