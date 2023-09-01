@@ -5,10 +5,10 @@ import by.bashlikovvv.hotelreservation.domain.model.Rooms
 
 class RoomsDtoMapper : Mapper<RoomsDto, Rooms> {
     override fun mapFromEntity(entity: RoomsDto): Rooms {
-        val roomsItemMapper = RoomsItemMapper()
+        val roomsItemDtoMapper = RoomsItemDtoMapper()
 
         return Rooms(entity.rooms.filterNotNull().map { roomsItem ->
-            roomsItemMapper.mapFromEntity(roomsItem)
+            roomsItemDtoMapper.mapFromEntity(roomsItem)
         })
     }
 
