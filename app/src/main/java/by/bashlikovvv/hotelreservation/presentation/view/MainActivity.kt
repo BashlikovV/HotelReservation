@@ -1,25 +1,19 @@
 package by.bashlikovvv.hotelreservation.presentation.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.navigation.findNavController
-import by.bashlikovvv.hotelreservation.R
+import androidx.appcompat.app.AppCompatActivity
 import by.bashlikovvv.hotelreservation.databinding.ActivityMainBinding
+import by.kirich1409.viewbindingdelegate.CreateMethod
+import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private val binding: ActivityMainBinding by viewBinding(createMethod = CreateMethod.INFLATE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.fragmentContainer)
-        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }
