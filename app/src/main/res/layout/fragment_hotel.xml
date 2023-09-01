@@ -7,8 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
     tools:targetApi="p">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,7 +48,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:lineHeight="26.4dp"
-            android:maxLines="1"
             android:ellipsize="end"
             android:text="@string/hotel_name"
             android:textFontWeight="500"
@@ -73,40 +70,50 @@
             android:textColor="@color/primary_light"
             app:layout_constraintTop_toBottomOf="@id/hotelName"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/hotelPrice"
+            app:layout_constraintBottom_toTopOf="@id/priceLinearLayout"
             android:clickable="true"
             android:focusable="true" />
 
-
-        <TextView
-            android:id="@+id/hotelPrice"
+        <LinearLayout
+            android:id="@+id/priceLinearLayout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textFontWeight="600"
-            android:fontFamily="@font/sf_pro_display_bold_600"
-            android:textSize="30sp"
-            android:textColor="@color/primary_color"
-            android:lineHeight="36dp"
-            android:text="@string/hotel_price"
+            android:layout_height="match_parent"
             app:layout_constraintTop_toBottomOf="@+id/hotelLocation"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/additionalTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/sf_pro_display_bold_400"
-            android:layout_marginStart="8dp"
-            android:text="@string/additional_title"
-            android:textColor="@color/secondary_light"
-            app:layout_constraintStart_toEndOf="@id/hotelPrice"
-            app:layout_constraintBottom_toBottomOf="@id/hotelPrice" />
+            <TextView
+                android:id="@+id/hotelPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textFontWeight="600"
+                android:fontFamily="@font/sf_pro_display_bold_600"
+                android:textSize="30sp"
+                android:textColor="@color/primary_color"
+                android:lineHeight="36dp"
+                android:text="@string/hotel_price" />
+
+            <TextView
+                android:id="@+id/additionalTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sf_pro_display_bold_400"
+                android:layout_weight="400"
+                android:textSize="16sp"
+                android:lineHeight="19.2dp"
+                android:textFontWeight="100"
+                android:layout_marginStart="8dp"
+                android:text="@string/additional_title"
+                android:textColor="@color/secondary_light"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="2dp"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/hotelPrice"
+            app:layout_constraintTop_toBottomOf="@id/priceLinearLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -171,17 +178,12 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
             
-            <Button
-                android:id="@+id/selectRoomBtn"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/sf_pro_display_bold_500"
-                android:backgroundTint="@color/primary_light"
+            <include
                 android:layout_marginTop="12dp"
-                android:textSize="16sp"
-                android:lineHeight="17.6dp"
-                android:letterSpacing="0.1"
-                android:text="@string/choose_number"/>
+                android:id="@+id/bottomLayout"
+                layout="@layout/navigation_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <ProgressBar
