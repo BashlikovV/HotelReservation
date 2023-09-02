@@ -2,9 +2,11 @@ package by.bashlikovvv.hotelreservation.presentation.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.TextView
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.widget.addTextChangedListener
@@ -18,6 +20,7 @@ import by.bashlikovvv.hotelreservation.presentation.contract.PhoneTextViewListen
 import by.bashlikovvv.hotelreservation.presentation.viewmodel.ReservationViewModel
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -32,7 +35,7 @@ class ReservationFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return binding.root
     }
 
@@ -45,32 +48,43 @@ class ReservationFragment : Fragment() {
         }
 
         binding.aboutBuyerLayout.phoneNumber.apply {
-            append(PhoneTextViewListener.INITIAL_VALUE)
+            setOnTouchListener { v, _ ->
+                if (text?.contentEquals("") == true) {
+                    append(PhoneTextViewListener.INITIAL_VALUE)
+                }
+                v.performClick()
+                false
+            }
             imeOptions = EditorInfo.IME_ACTION_NEXT
             binding.addTextChangedListener()
         }
         binding.aboutBuyerLayout.emailAddress.apply {
             imeOptions = EditorInfo.IME_ACTION_DONE
-            setOnEditorActionListener { v, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    onFocusChangeListener.onFocusChange(v, false)
+            setUpEmailInput()
+        }
+        binding.include
+    }
+
+    private fun EditText.setUpEmailInput() {
+        setOnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                onFocusChangeListener.onFocusChange(v, false)
+
+            }
+            true
+        }
+        setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                if (binding.aboutBuyerLayout.emailAddress.text?.contains('.') == false) {
 
                 }
-                true
             }
-            setOnFocusChangeListener { v, hasFocus ->
-                if (!hasFocus) {
-                    if (binding.aboutBuyerLayout.emailAddress.text?.contains('.') == false) {
-                        v.background = R.color.error.toDrawable()
-                    }
-                }
-            }
-            addTextChangedListener {
-                if (binding.aboutBuyerLayout.emailAddress.text?.contains('.') == false) {
-                    binding.aboutBuyerLayout.emailAddress.background = R.color.error.toDrawable()
-                } else {
-                    binding.aboutBuyerLayout.emailAddress.background = R.color.background.toDrawable()
-                }
+        }
+        addTextChangedListener {
+            if (binding.aboutBuyerLayout.emailAddress.text?.contains('.') == false) {
+                binding.aboutBuyerLayout.emailAddress.background = R.color.error.toDrawable()
+            } else {
+                binding.aboutBuyerLayout.emailAddress.background = R.color.background.toDrawable()
             }
         }
     }
@@ -146,10 +160,5 @@ class ReservationFragment : Fragment() {
             binding.bookingInfoLayout.addView(layout)
             idx++
         }
-    }
-
-    companion object {
-
-        const val ARG_ROOM = "room"
     }
 }
