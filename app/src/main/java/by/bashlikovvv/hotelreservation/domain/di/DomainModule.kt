@@ -1,8 +1,10 @@
 package by.bashlikovvv.hotelreservation.domain.di
 
 import by.bashlikovvv.hotelreservation.domain.repository.IHotelRepository
+import by.bashlikovvv.hotelreservation.domain.repository.IReservationRepository
 import by.bashlikovvv.hotelreservation.domain.repository.IRoomsRepository
 import by.bashlikovvv.hotelreservation.domain.usecase.GetHotelByIdUseCase
+import by.bashlikovvv.hotelreservation.domain.usecase.GetReservationUseCase
 import by.bashlikovvv.hotelreservation.domain.usecase.GetRoomsUseCase
 import dagger.Module
 import dagger.Provides
@@ -21,5 +23,10 @@ class DomainModule {
     @Provides
     fun provideGetRoomsUseCase(roomsRepository: IRoomsRepository): GetRoomsUseCase {
         return GetRoomsUseCase(roomsRepository)
+    }
+
+    @Provides
+    fun provideGetReservationUseCase(reservationRepository: IReservationRepository): GetReservationUseCase {
+        return GetReservationUseCase(reservationRepository)
     }
 }

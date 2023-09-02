@@ -1,15 +1,12 @@
 package by.bashlikovvv.hotelreservation.data
 
-open class Exceptions : RuntimeException {
+sealed class Exceptions : RuntimeException {
 
     constructor() : super()
 
     constructor(message: String) : super(message)
-}
 
-class HotelNotFoundException : Exceptions {
+    class HotelNotFoundException : Exceptions()
 
-    constructor() : super()
-
-    constructor(message: String) : super(message)
+    class ReservationNotFoundException : Exceptions()
 }

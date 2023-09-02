@@ -24,4 +24,38 @@
     <string name="from_string">"от %1$s"</string>
     <string name="about_room">Подробнее о номере</string>
     <string name="additional_about_room">Подробнее о номере</string>
+    <string name="currency">%1$s ₽</string>
+    <string name="from">Вылет из</string>
+    <string name="nights">" ночей"</string>
+    <string name="info_about_buyer">Информация о покупателе</string>
+    <string name="phone_number">Номер телефона</string>
+    <string name="email">Почта</string>
+    <string-array name="booking_info">
+        <item>Вылет из</item>
+        <item>Страна, город</item>
+        <item>Даты</item>
+        <item>Кол-во ночей</item>
+        <item>Отель</item>
+        <item>Номер</item>
+        <item>Питание</item>
+    </string-array>
+    <string-array name="numbers">
+        <item>Первый</item>
+        <item>Второй</item>
+        <item>Третий</item>
+        <item>Четвёрты</item>
+        <item>Пятый</item>
+        <item>Шестой</item>
+        <item>Седьмой</item>
+        <item>Восьмой</item>
+        <item>Девятый</item>
+        <item>Десятый</item>
+    </string-array>
+    <string name="tourist_number">%1$s турист</string>
+    <string name="name">Имя</string>
+    <string name="surname">Фамилия</string>
+    <string name="date_of_birth">Дата рождения</string>
+    <string name="citizenship">Гражданство</string>
+    <string name="passport_number">Номер загранпаспорта</string>
+    <string name="validity_period">Срок действия загранпаспорта</string>
 </resources>

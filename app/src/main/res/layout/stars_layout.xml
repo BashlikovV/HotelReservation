@@ -17,7 +17,7 @@
         android:src="@drawable/star"
         android:importantForAccessibility="no"
         android:layout_gravity="center"
-        android:background="@drawable/starts_background_outline"
+        android:background="@color/transparent"
         android:layout_marginStart="10dp"
         android:layout_marginBottom="7dp"
         android:layout_marginTop="7dp"/>
@@ -26,7 +26,7 @@
         android:id="@+id/starsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/starts_background_outline"
+        android:background="@color/transparent"
         android:fontFamily="@font/sf_pro_display_bold_500"
         android:textColor="@color/stars_text"
         android:textSize="16sp"

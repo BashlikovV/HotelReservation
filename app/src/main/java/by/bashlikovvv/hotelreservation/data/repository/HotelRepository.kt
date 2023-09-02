@@ -2,7 +2,7 @@ package by.bashlikovvv.hotelreservation.data.repository
 
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import by.bashlikovvv.hotelreservation.data.HotelNotFoundException
+import by.bashlikovvv.hotelreservation.data.Exceptions
 import by.bashlikovvv.hotelreservation.data.mapper.HotelDtoMapper
 import by.bashlikovvv.hotelreservation.data.remote.HotelApi
 import by.bashlikovvv.hotelreservation.data.remote.response.HotelDto
@@ -17,9 +17,9 @@ class HotelRepository(
 
     /**
      * @id - an assumed id identifying the hotel
-     * @throws HotelNotFoundException when [HotelDto] is null
+     * @throws Exceptions.HotelNotFoundException when [HotelDto] is null
      * */
-    @Throws(HotelNotFoundException::class)
+    @Throws(Exceptions.HotelNotFoundException::class)
     override suspend fun getHotelInfo(id: Long): Hotel {
         return if (isConnected()) {
             getHotelInfoOnline(id)
@@ -30,9 +30,9 @@ class HotelRepository(
 
     /**
      * @id - an assumed id identifying the hotel
-     * @throws HotelNotFoundException when [HotelDto] is null
+     * @throws Exceptions.HotelNotFoundException when [HotelDto] is null
      * */
-    @Throws(HotelNotFoundException::class)
+    @Throws(Exceptions.HotelNotFoundException::class)
     private suspend fun getHotelInfoOnline(id: Long): Hotel {
         val hotelInfoResponse = hotelApi.getHotelById(/**[id]*/)
         val hotelDto = hotelInfoResponse.body()
@@ -41,7 +41,7 @@ class HotelRepository(
             val hotelDtoMapper = HotelDtoMapper()
             hotelDtoMapper.mapFromEntity(hotelDto)
         } else {
-            throw HotelNotFoundException()
+            throw Exceptions.HotelNotFoundException()
         }
     }
 

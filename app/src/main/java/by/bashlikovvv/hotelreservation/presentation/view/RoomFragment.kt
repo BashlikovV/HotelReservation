@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.bashlikovvv.hotelreservation.R
 import by.bashlikovvv.hotelreservation.databinding.FragmentRoomBinding
-import by.bashlikovvv.hotelreservation.domain.model.RoomItem
 import by.bashlikovvv.hotelreservation.presentation.adapters.RoomsListAdapter
 import by.bashlikovvv.hotelreservation.presentation.viewmodel.RoomFragmentViewModel
 import by.kirich1409.viewbindingdelegate.CreateMethod
@@ -33,14 +31,14 @@ class RoomFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = RoomsListAdapter { onOpenClickListener(it) }
+        val adapter = RoomsListAdapter { onOpenClickListener() }
         binding.roomsList.adapter = adapter
         val dividerItemDecoration = DividerItemDecoration(
             binding.roomsList.context,
@@ -55,11 +53,7 @@ class RoomFragment : Fragment() {
         }
     }
 
-    private fun onOpenClickListener(roomItem: RoomItem) {
-        val args = bundleOf(ReservationFragment.ARG_ROOM to roomItem)
-        findNavController().navigate(
-            resId = R.id.action_roomFragment_to_reservationFragment,
-            args = args
-        )
+    private fun onOpenClickListener() {
+        findNavController().navigate(resId = R.id.action_roomFragment_to_reservationFragment)
     }
 }
