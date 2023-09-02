@@ -29,10 +29,13 @@
             android:orientation="vertical" />
 
         <include
+            android:layout_marginTop="21dp"
             android:id="@+id/aboutBuyerLayout"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             app:layout_constraintTop_toBottomOf="@id/bookingInfoLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             layout="@layout/buyer_info_layout"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
