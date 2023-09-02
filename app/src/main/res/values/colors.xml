@@ -6,9 +6,10 @@
     <color name="primary_light_a01">#200D72FF</color>
     <color name="secondary_light">#FF828796</color>
     <color name="secondary_dark">#FF2C3035</color>
-    <color name="stars_background">#20FFC700</color>
+    <color name="stars_background">#50FFC700</color>
     <color name="stars_text">#FFFFA800</color>
     <color name="about_hotel_background">#FFFBFBFC</color>
     <color name="about_hotel_text">#FF828796</color>
     <color name="transparent">#00000000</color>
+    <color name="error">#33EB5757</color>
 </resources>
