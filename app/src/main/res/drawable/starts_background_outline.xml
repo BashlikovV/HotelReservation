@@ -3,4 +3,8 @@
     android:shape="rectangle"
     android:tint="@color/stars_background">
     <corners android:radius="5dp"/>
+    <gradient
+        android:startColor="@color/stars_background"
+        android:centerColor="@color/stars_background"
+        android:endColor="@color/stars_background"/>
 </shape>
