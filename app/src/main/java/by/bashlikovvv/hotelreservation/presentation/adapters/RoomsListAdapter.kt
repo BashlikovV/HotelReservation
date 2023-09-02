@@ -2,7 +2,6 @@ package by.bashlikovvv.hotelreservation.presentation.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.core.view.get
@@ -32,7 +31,7 @@ class RoomsListAdapter(
         fun onBind(roomItem: RoomItem) {
             binding.navLayout.selectRoomBtn.text = getStringRes(R.string.about_room, "")
             binding.roomName.text = roomItem.name
-            binding.roomPrice.text = getStringRes(R.string.from_string, roomItem.price.toString())
+            binding.roomPrice.text = getStringRes(R.string.currency, roomItem.price.toString())
             binding.additionalTitle.text = roomItem.pricePer
             binding.navLayout.selectRoomBtn.setOnClickListener { onClick(roomItem) }
             roomItem.peculiarities.forEach { addUsability(it) }
