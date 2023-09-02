@@ -68,7 +68,7 @@ class HotelFragment : Fragment() {
             rootLayout.starsText.text = starsText
             hotelName.text = hotel.name
             hotelLocation.text = hotel.address
-            hotelPrice.text = getStringRes(R.string.from_string, hotel.minimalPrice.toString())
+            hotelPrice.text = getStringRes(R.string.currency, hotel.minimalPrice.toString())
             additionalTitle.text = hotel.priceForIt
             hotel.description.peculiarities.forEach {
                 addUsability(it)
