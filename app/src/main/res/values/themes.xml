@@ -7,7 +7,24 @@
         <item name="android:statusBarColor">
             @color/background
         </item>
+        <item name="colorPrimary">
+            @color/primary_color
+        </item>
     </style>
 
     <style name="Theme.HotelReservation" parent="Base.Theme.HotelReservation" />
+
+    <style name="MyHintTextAppearance" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">12sp</item>
+        <item name="color">@color/hint_color</item>
+        <item name="android:textColorHint">@color/hint_color</item>
+        <item name="hintTextColor">@color/hint_color</item>
+        <item name="hintTextAppearance">@font/sf_pro_display_bold_400</item>
+    </style>
+
+    <style name="Widget.Material3.TextInputLayout" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="hintTextAppearance">@style/MyHintTextAppearance</item>
+    </style>
 </resources>

@@ -1,14 +1,14 @@
 package by.bashlikovvv.hotelreservation.presentation.view
 
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Email
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import android.widget.TextView
-import androidx.core.graphics.drawable.toDrawable
+import androidx.annotation.StringRes
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import by.bashlikovvv.hotelreservation.R
 import by.bashlikovvv.hotelreservation.databinding.FragmentReservationBinding
 import by.bashlikovvv.hotelreservation.domain.model.Reservation
+import by.bashlikovvv.hotelreservation.domain.model.TouristInfo
 import by.bashlikovvv.hotelreservation.presentation.contract.PhoneTextViewListener
 import by.bashlikovvv.hotelreservation.presentation.viewmodel.ReservationViewModel
 import by.kirich1409.viewbindingdelegate.CreateMethod
@@ -41,12 +42,37 @@ class ReservationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.launch {
-            viewModel.reservation.collectLatest {
-                setBookingInfo(it)
+
+        addProgressBar()
+        addBookingInfo()
+
+        setUpPhoneNumberEditText()
+        addTouristListener()
+        setUpEmailEditText()
+    }
+
+    private fun setUpEmailEditText() {
+        binding.aboutBuyerLayout.emailAddress.apply {
+            imeOptions = EditorInfo.IME_ACTION_DONE
+            setOnEditorActionListener { v, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    val flag = android.util.Patterns.EMAIL_ADDRESS.matcher(
+                        binding.aboutBuyerLayout.emailAddress.text.toString()
+                    ).matches()
+                    if (!flag) {
+                        val dr = ResourcesCompat.getDrawable(resources, R.drawable.te_error_backgroud, resources.newTheme())
+                        binding.aboutBuyerLayout.emailAddress.background = dr
+                    } else {
+                        val dr = ResourcesCompat.getDrawable(resources, R.drawable.te_background, resources.newTheme())
+                        binding.aboutBuyerLayout.emailAddress.background = dr
+                    }
+                }
+                true
             }
         }
+    }
 
+    private fun setUpPhoneNumberEditText() {
         binding.aboutBuyerLayout.phoneNumber.apply {
             setOnTouchListener { v, _ ->
                 if (text?.contentEquals("") == true) {
@@ -58,33 +84,147 @@ class ReservationFragment : Fragment() {
             imeOptions = EditorInfo.IME_ACTION_NEXT
             binding.addTextChangedListener()
         }
-        binding.aboutBuyerLayout.emailAddress.apply {
-            imeOptions = EditorInfo.IME_ACTION_DONE
-            setUpEmailInput()
-        }
-        binding.include
     }
 
-    private fun EditText.setUpEmailInput() {
-        setOnEditorActionListener { v, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                onFocusChangeListener.onFocusChange(v, false)
-
+    private fun addBookingInfo() {
+        lifecycleScope.launch {
+            viewModel.reservation.collectLatest {
+                setBookingInfo(it)
             }
-            true
         }
-        setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                if (binding.aboutBuyerLayout.emailAddress.text?.contains('.') == false) {
+    }
 
+    private fun addProgressBar() {
+        lifecycleScope.launch {
+            viewModel.updateVisibility.collectLatest {
+                binding.progressCircular.visibility = if (it.value) {
+                    setVisible()
+                    View.VISIBLE
+                } else {
+                    setInvisible()
+                    View.GONE
                 }
             }
         }
-        addTextChangedListener {
-            if (binding.aboutBuyerLayout.emailAddress.text?.contains('.') == false) {
-                binding.aboutBuyerLayout.emailAddress.background = R.color.error.toDrawable()
-            } else {
-                binding.aboutBuyerLayout.emailAddress.background = R.color.background.toDrawable()
+    }
+
+    private fun addTouristListener() {
+        val stringArray = resources.getStringArray(R.array.numbers)
+        viewModel.updateFirsTouristName(getTextRes(R.string.tourist_number, stringArray[0]))
+
+        lifecycleScope.launch {
+            viewModel.tourists.collectLatest {
+                binding.aboutBuyerLayout.touristsInfoLayout.linearLayout.removeAllViews()
+                it.forEach { touristInfo ->
+                    addTourist(touristInfo)
+                }
+            }
+        }
+
+        binding.aboutBuyerLayout.touristsInfoLayout.addTouristImage.setOnClickListener {
+            val newId = viewModel.getLastTouristId() + 1
+            if (newId > stringArray.lastIndex) return@setOnClickListener
+            viewModel.addTourist(TouristInfo(
+                name = getTextRes(R.string.tourist_number, stringArray[newId]),
+                id = newId
+            ))
+        }
+    }
+
+    private fun addTourist(touristInfo: TouristInfo) {
+        if (touristInfo.isEmpty()) return
+        val layout = layoutInflater.inflate(
+            R.layout.expandable_content_layout,
+            binding.aboutBuyerLayout.touristsInfoLayout.linearLayout,
+            false
+        )
+        layout.findViewById<TextView>(R.id.touristCount).text = touristInfo.name
+        addNameTextChangedListener(layout, touristInfo)
+        addSurnameTextChangedListener(layout, touristInfo)
+        addBirthDateTextChangedListener(layout, touristInfo)
+        addNameCitizenshipTextChangedListener(layout, touristInfo)
+        addPassportNumberTextChangedListener(layout, touristInfo)
+        addValidityPeriodTextChangedListener(layout, touristInfo)
+        binding.aboutBuyerLayout.touristsInfoLayout.linearLayout.addView(
+            layout,
+            touristInfo.id
+        )
+    }
+
+    private fun addValidityPeriodTextChangedListener(layout: View, touristInfo: TouristInfo) {
+        layout.findViewById<TextInputEditText>(R.id.validityPeriod).apply {
+            text?.append(touristInfo.validityPeriod)
+            addTextChangedListener {
+                viewModel.updateTourist(
+                    touristInfo.copy(
+                        validityPeriod = it.toString()
+                    )
+                )
+            }
+        }
+    }
+
+    private fun addPassportNumberTextChangedListener(layout: View, touristInfo: TouristInfo) {
+        layout.findViewById<TextInputEditText>(R.id.passportNumber).apply {
+            text?.append(touristInfo.passportNumber)
+            addTextChangedListener {
+                viewModel.updateTourist(
+                    touristInfo.copy(
+                        passportNumber = it.toString()
+                    )
+                )
+            }
+        }
+    }
+
+    private fun addNameCitizenshipTextChangedListener(layout: View, touristInfo: TouristInfo) {
+        layout.findViewById<TextInputEditText>(R.id.citizenship).apply {
+            text?.append(touristInfo.citizenship)
+            addTextChangedListener {
+                viewModel.updateTourist(
+                    touristInfo.copy(
+                        citizenship = it.toString()
+                    )
+                )
+            }
+        }
+    }
+
+    private fun addBirthDateTextChangedListener(layout: View, touristInfo: TouristInfo) {
+        layout.findViewById<TextInputEditText>(R.id.date_of_birth).apply {
+            text?.append(touristInfo.dateOfBirth)
+            addTextChangedListener {
+                viewModel.updateTourist(
+                    touristInfo.copy(
+                        dateOfBirth = it.toString()
+                    )
+                )
+            }
+        }
+    }
+
+    private fun addSurnameTextChangedListener(layout: View, touristInfo: TouristInfo) {
+        layout.findViewById<TextInputEditText>(R.id.surname).apply {
+            text?.append(touristInfo.surname)
+            addTextChangedListener {
+                viewModel.updateTourist(
+                    touristInfo.copy(
+                        surname = it.toString()
+                    )
+                )
+            }
+        }
+    }
+
+    private fun addNameTextChangedListener(layout: View, touristInfo: TouristInfo) {
+        layout.findViewById<TextInputEditText>(R.id.name).apply {
+            text?.append(touristInfo.inputName)
+            addTextChangedListener {
+                viewModel.updateTourist(
+                    touristInfo.copy(
+                        inputName = it.toString()
+                    )
+                )
             }
         }
     }
@@ -160,5 +300,21 @@ class ReservationFragment : Fragment() {
             binding.bookingInfoLayout.addView(layout)
             idx++
         }
+    }
+
+    private fun getTextRes(@StringRes id: Int, data: String): String {
+        return requireContext().getString(id, data)
+    }
+
+    private fun setVisible() {
+        binding.include.linearLayout.visibility = View.GONE
+        binding.bookingInfoLayout.visibility = View.GONE
+        binding.aboutBuyerLayout.constraintLayout.visibility = View.GONE
+    }
+
+    private fun setInvisible() {
+        binding.include.linearLayout.visibility = View.VISIBLE
+        binding.bookingInfoLayout.visibility = View.VISIBLE
+        binding.aboutBuyerLayout.constraintLayout.visibility = View.VISIBLE
     }
 }
