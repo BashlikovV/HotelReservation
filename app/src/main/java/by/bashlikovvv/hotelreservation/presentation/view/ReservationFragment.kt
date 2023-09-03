@@ -1,6 +1,7 @@
 package by.bashlikovvv.hotelreservation.presentation.view
 
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Email
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,7 +56,10 @@ class ReservationFragment : Fragment() {
             imeOptions = EditorInfo.IME_ACTION_DONE
             setOnEditorActionListener { v, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (binding.aboutBuyerLayout.emailAddress.text?.contains('.') == false) {
+                    val flag = android.util.Patterns.EMAIL_ADDRESS.matcher(
+                        binding.aboutBuyerLayout.emailAddress.text.toString()
+                    ).matches()
+                    if (!flag) {
                         val dr = ResourcesCompat.getDrawable(resources, R.drawable.te_error_backgroud, resources.newTheme())
                         binding.aboutBuyerLayout.emailAddress.background = dr
                     } else {
