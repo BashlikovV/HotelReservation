@@ -4,29 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:targetApi="p"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_marginBottom="16dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="wrap_content"
         android:hint="@string/name"
-        app:hintTextColor="@color/about_hotel_text"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-        android:background="@color/background"
+        app:hintTextColor="@color/hint_color"
+        style="@style/Widget.Material3.TextInputLayout"
         app:boxStrokeColor="@color/background">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background"
-            android:textAppearance="@font/sf_pro_display_bold_400"
+            android:background="@drawable/te_background"
             android:fontFamily="@font/sf_pro_display_bold_400"
-            android:textColorHint="@color/primary_color"
             android:textColor="@color/primary_color"
             android:textSize="16sp"
-            android:letterSpacing="0.25"
+            android:letterSpacing="0.10"
             android:lineHeight="17.6dp"/>
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -36,22 +34,19 @@
         android:layout_height="52dp"
         android:layout_marginTop="8dp"
         android:hint="@string/surname"
-        app:hintTextColor="@color/about_hotel_text"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-        android:background="@color/background"
+        app:hintTextColor="@color/hint_color"
+        style="@style/Widget.Material3.TextInputLayout"
         app:boxStrokeColor="@color/background">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/surname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background"
-            android:textAppearance="@font/sf_pro_display_bold_400"
+            android:background="@drawable/te_background"
             android:fontFamily="@font/sf_pro_display_bold_400"
-            android:textColorHint="@color/primary_color"
             android:textColor="@color/primary_color"
             android:textSize="16sp"
-            android:letterSpacing="0.25"
+            android:letterSpacing="0.10"
             android:lineHeight="17.6dp"/>
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -61,22 +56,19 @@
         android:layout_height="52dp"
         android:layout_marginTop="8dp"
         android:hint="@string/date_of_birth"
-        app:hintTextColor="@color/about_hotel_text"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-        android:background="@color/background"
+        app:hintTextColor="@color/hint_color"
+        style="@style/Widget.Material3.TextInputLayout"
         app:boxStrokeColor="@color/background">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/date_of_birth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background"
-            android:textAppearance="@font/sf_pro_display_bold_400"
+            android:background="@drawable/te_background"
             android:fontFamily="@font/sf_pro_display_bold_400"
-            android:textColorHint="@color/primary_color"
             android:textColor="@color/primary_color"
             android:textSize="16sp"
-            android:letterSpacing="0.25"
+            android:letterSpacing="0.10"
             android:lineHeight="17.6dp"/>
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -86,22 +78,19 @@
         android:layout_height="52dp"
         android:layout_marginTop="8dp"
         android:hint="@string/citizenship"
-        app:hintTextColor="@color/about_hotel_text"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-        android:background="@color/background"
+        app:hintTextColor="@color/hint_color"
+        style="@style/Widget.Material3.TextInputLayout"
         app:boxStrokeColor="@color/background">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/citizenship"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background"
-            android:textAppearance="@font/sf_pro_display_bold_400"
+            android:background="@drawable/te_background"
             android:fontFamily="@font/sf_pro_display_bold_400"
-            android:textColorHint="@color/primary_color"
             android:textColor="@color/primary_color"
             android:textSize="16sp"
-            android:letterSpacing="0.25"
+            android:letterSpacing="0.10"
             android:lineHeight="17.6dp"/>
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -111,22 +100,19 @@
         android:layout_height="52dp"
         android:layout_marginTop="8dp"
         android:hint="@string/passport_number"
-        app:hintTextColor="@color/about_hotel_text"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-        android:background="@color/background"
+        app:hintTextColor="@color/hint_color"
+        style="@style/Widget.Material3.TextInputLayout"
         app:boxStrokeColor="@color/background">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passportNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background"
-            android:textAppearance="@font/sf_pro_display_bold_400"
+            android:background="@drawable/te_background"
             android:fontFamily="@font/sf_pro_display_bold_400"
-            android:textColorHint="@color/primary_color"
             android:textColor="@color/primary_color"
             android:textSize="16sp"
-            android:letterSpacing="0.25"
+            android:letterSpacing="0.10"
             android:lineHeight="17.6dp"/>
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -136,22 +122,19 @@
         android:layout_height="52dp"
         android:layout_marginTop="8dp"
         android:hint="@string/validity_period"
-        app:hintTextColor="@color/about_hotel_text"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-        android:background="@color/background"
+        app:hintTextColor="@color/hint_color"
+        style="@style/Widget.Material3.TextInputLayout"
         app:boxStrokeColor="@color/background">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/validityPeriod"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background"
-            android:textAppearance="@font/sf_pro_display_bold_400"
+            android:background="@drawable/te_background"
             android:fontFamily="@font/sf_pro_display_bold_400"
-            android:textColorHint="@color/primary_color"
             android:textColor="@color/primary_color"
             android:textSize="16sp"
-            android:letterSpacing="0.25"
+            android:letterSpacing="0.10"
             android:lineHeight="17.6dp"/>
 
     </com.google.android.material.textfield.TextInputLayout>
