@@ -2,8 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     tools:targetApi="p">
 
     <TextView
@@ -21,54 +22,69 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-
-    <EditText
-        android:id="@+id/phoneNumber"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/phoneNumberLayout"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:background="@drawable/te_background"
-        android:inputType="phone"
-        android:textAppearance="@font/sf_pro_display_bold_400"
-        android:fontFamily="@font/sf_pro_display_bold_400"
-        android:textColorHint="@color/primary_color"
-        android:textColor="@color/primary_color"
-        android:textSize="16sp"
-        android:lineHeight="17.6dp"
-        android:cursorVisible="false"
-        android:autofillHints="phone"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        style="@style/Widget.Material3.TextInputLayout"
         android:hint="@string/phone_number"
+        app:hintTextColor="@color/hint_color"
         app:layout_constraintTop_toBottomOf="@id/textView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"/>
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <EditText
-        android:id="@+id/emailAddress"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/phoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/te_background"
+            android:inputType="phone"
+            android:textAppearance="@font/sf_pro_display_bold_400"
+            android:fontFamily="@font/sf_pro_display_bold_400"
+            android:textColor="@color/primary_color"
+            android:textSize="16sp"
+            android:lineHeight="17.6dp"
+            android:cursorVisible="false"
+            android:autofillHints="phone"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emailAddressLayout"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="@string/email"
-        android:background="@color/input_background"
-        android:textAppearance="@font/sf_pro_display_bold_400"
-        android:fontFamily="@font/sf_pro_display_bold_400"
-        android:textColorHint="@color/primary_color"
-        android:textColor="@color/primary_color"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:textSize="16sp"
-        android:lineHeight="17.6dp"
-        android:autofillHints="emailAddress"
-        android:inputType="textEmailAddress"
-        app:layout_constraintTop_toBottomOf="@id/phoneNumber"
+        app:hintTextColor="@color/hint_color"
+        style="@style/Widget.Material3.TextInputLayout"
+        app:layout_constraintTop_toBottomOf="@id/phoneNumberLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/emailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/te_background"
+            android:textAppearance="@font/sf_pro_display_bold_400"
+            android:fontFamily="@font/sf_pro_display_bold_400"
+            android:textColor="@color/primary_color"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textSize="16sp"
+            android:lineHeight="17.6dp"
+            android:autofillHints="emailAddress"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <include
+        android:id="@+id/touristsInfoLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/emailAddress"
+        app:layout_constraintTop_toBottomOf="@id/emailAddressLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         layout="@layout/tourists_info_layout"/>
