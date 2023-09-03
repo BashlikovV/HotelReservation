@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<by.bashlikovvv.hotelreservation.presentation.view.ExpandableLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:targetApi="P"
+    android:layout_marginBottom="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="16dp">
+
+            <TextView
+                android:id="@+id/touristCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/sf_pro_display_bold_500"
+                android:lineHeight="26.4dp"
+                android:text="@string/tourist_number"
+                android:textColor="@color/primary_color"
+                android:textFontWeight="500"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/arrowImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:src="@drawable/arrow_bottom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <LinearLayout
+            android:id="@+id/expandableLayoutContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/tourist_info_item" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</by.bashlikovvv.hotelreservation.presentation.view.ExpandableLayout>
