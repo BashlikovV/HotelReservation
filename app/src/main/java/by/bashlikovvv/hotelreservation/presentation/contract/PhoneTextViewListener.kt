@@ -43,5 +43,4 @@ class PhoneTextViewListener(
         onTextChanged(_before, _old, _new, _after)
         _ignore = false
     }
-
 }
