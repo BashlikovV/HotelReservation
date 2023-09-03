@@ -19,6 +19,10 @@ class ExpandableLayout @JvmOverloads constructor(
     private lateinit var contentLayout: ViewGroup
     private lateinit var arrow: View
 
+    init {
+        this.elevation = 0f
+    }
+
     private var expanded = false
 
     private var animating = false
