@@ -59,4 +59,13 @@
     <string name="passport_number">Номер загранпаспорта</string>
     <string name="validity_period">Срок действия загранпаспорта</string>
     <string name="add_tourist">Добавить туриста</string>
+    <string name="navigate_back">navigate back</string>
+    <string name="tour">Тур</string>
+    <string name="fuel_fee">Топливный сбор</string>
+    <string name="service_fee">Сервисный сбор</string>
+    <string name="to_payment">К оплате</string>
+    <string name="payment">Оплатить %1$s ₽</string>
+    <string name="hotel">Отель</string>
+    <string name="reservation">Бронирование</string>
+    <string name="success">Заказ оплачен</string>
 </resources>

@@ -7,6 +7,41 @@
         <item name="android:statusBarColor">
             @color/background
         </item>
-        Б
+    </style>
+
+    <style name="Theme.HotelReservation" parent="Base.Theme.HotelReservation" />
+
+    <style name="MyHintTextAppearance" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">12sp</item>
+        <item name="color">@color/hint_color</item>
+        <item name="android:textColorHint">@color/hint_color</item>
+        <item name="hintTextColor">@color/hint_color</item>
+        <item name="hintTextAppearance">@font/sf_pro_display_bold_400</item>
+    </style>
+
+    <style name="Widget.Material3.TextInputLayout" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="hintTextAppearance">@style/MyHintTextAppearance</item>
+    </style>
+
+    <style name="TitleTextStyle" parent="@style/Base.TextAppearance.AppCompat.Title">
+        <item name="android:textSize">18sp</item>
+        <item name="titleTextAppearance">@font/sf_pro_display_bold_500</item>
+        <item name="lineHeight">21.6dp</item>
+        <item name="color">@color/primary_color</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:ellipsize">start</item>
+        <item name="titleTextEllipsize">start</item>
+    </style>
+
+    <style name="MyToolbarTheme" parent="Widget.AppCompat.Toolbar">
+        <item name="titleTextColor">@color/primary_color</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="titleTextAppearance">@style/TitleTextStyle</item>
+        <item name="android:ellipsize">start</item>
+        <item name="titleTextEllipsize">start</item>
     </style>
 </resources>

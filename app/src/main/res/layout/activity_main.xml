@@ -7,26 +7,14 @@
     tools:context=".presentation.view.MainActivity"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="44dp" >
-
-        <TextView
-            android:id="@+id/toolbarTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/hotel_string"
-            android:layout_gravity="center"
-            android:textSize="22sp"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="@font/sf_pro_display_bold_500"
-            android:lineHeight="21.6dp"
-            android:textFontWeight="500"
-            android:textColor="@color/primary_color"
-            tools:targetApi="p" />
-
-    </androidx.appcompat.widget.Toolbar>
+        android:layout_height="44dp"
+        style="@style/MyToolbarTheme"
+        app:title="@string/hotel_string"
+        app:titleCentered="true">
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainer"
