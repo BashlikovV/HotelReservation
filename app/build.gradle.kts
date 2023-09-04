@@ -2,8 +2,6 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
-    id("com.google.dagger.hilt.android")
-    id("kotlin-kapt")
 }
 
 android {
@@ -71,11 +69,6 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
     //Adapter delegates
     implementation("com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:4.3.2")
-    //Hilt
-    implementation("com.google.dagger:hilt-android:2.47")
-    kapt("com.google.dagger:hilt-compiler:2.47")
-}
-
-kapt {
-    correctErrorTypes = true
+    //Koin
+    implementation("io.insert-koin:koin-android:3.4.3")
 }

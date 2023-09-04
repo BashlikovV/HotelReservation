@@ -12,92 +12,76 @@ import by.bashlikovvv.hotelreservation.domain.repository.IHotelRepository
 import by.bashlikovvv.hotelreservation.domain.repository.IReservationRepository
 import by.bashlikovvv.hotelreservation.domain.repository.IRoomsRepository
 import by.bashlikovvv.hotelreservation.utils.Constants
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import org.koin.dsl.module
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-class DataModule {
+val dataModule = module {
 
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder().build()
+    single<OkHttpClient> {
+        OkHttpClient.Builder().build()
     }
 
-    @Provides
-    @Singleton
-    fun provideConverterFactory(): Converter.Factory {
-        return GsonConverterFactory.create()
+    single<Converter.Factory> {
+        GsonConverterFactory.create()
     }
 
-    @Provides
-    @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient, factory: Converter.Factory): Retrofit = Retrofit.Builder()
-        .baseUrl(Constants.BASE_URL)
-        .client(okHttpClient)
-        .addConverterFactory(factory)
-        .build()
+    single<Retrofit> {
+        val okHttpClient: OkHttpClient = get()
+        val factory: Converter.Factory = get()
 
-    @Provides
-    @Singleton
-    fun provideHotelApi(retrofit: Retrofit): HotelApi {
-        return retrofit.create(HotelApi::class.java)
+        Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(factory)
+            .build()
     }
 
-    @Provides
-    @Singleton
-    fun provideRoomsApi(retrofit: Retrofit): RoomsApi {
-        return retrofit.create(RoomsApi::class.java)
+    single<HotelApi> {
+        val retrofit: Retrofit = get()
+
+        retrofit.create(HotelApi::class.java)
     }
 
-    @Provides
-    @Singleton
-    fun provideReservationApi(retrofit: Retrofit): ReservationApi {
-        return retrofit.create(ReservationApi::class.java)
+    single<RoomsApi> {
+        val retrofit: Retrofit = get()
+
+        retrofit.create(RoomsApi::class.java)
     }
 
-    @Provides
-    @Singleton
-    fun provideHotelRepository(
-        @ApplicationContext context: Context,
-        hotelApi: HotelApi
-    ): IHotelRepository {
+    single<ReservationApi> {
+        val retrofit: Retrofit = get()
+
+        retrofit.create(ReservationApi::class.java)
+    }
+
+    single<IHotelRepository> {
+        val context: Context = get()
+        val hotelApi: HotelApi = get()
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-        return HotelRepository(
+        HotelRepository(
             cm = connectivityManager,
             hotelApi = hotelApi
         )
     }
 
-    @Provides
-    @Singleton
-    fun provideRoomsRepository(
-        @ApplicationContext context: Context,
-        roomsApi: RoomsApi
-    ): IRoomsRepository {
+    single<IRoomsRepository> {
+        val context: Context = get()
+        val roomsApi: RoomsApi = get()
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-        return RoomsRepository(
+        RoomsRepository(
             cm = connectivityManager,
             roomsApi = roomsApi
         )
     }
 
-    @Provides
-    @Singleton
-    fun provideReservationRepository(
-        reservationApi: ReservationApi
-    ): IReservationRepository {
-        return ReservationRepository(reservationApi)
+    single<IReservationRepository> {
+        val reservationApi: ReservationApi = get()
+
+        ReservationRepository(reservationApi)
     }
 }
