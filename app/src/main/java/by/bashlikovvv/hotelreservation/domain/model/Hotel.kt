@@ -1,7 +1,7 @@
 package by.bashlikovvv.hotelreservation.domain.model
 
-data class Hotel(
-    val id: Long = 0L,
+class Hotel(
+    id: Long = 0L,
     val name: String = "",
     val address: String = "",
     val minimalPrice: Int = 0,
@@ -10,4 +10,7 @@ data class Hotel(
     val ratingName: String = "",
     val imagesUrls: List<String> = emptyList(),
     val description: Description = Description()
-)
+) : HotelItem(id) {
+
+    fun isEmpty() = name.isEmpty()
+}
