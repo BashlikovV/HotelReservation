@@ -4,25 +4,35 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import by.bashlikovvv.hotelreservation.R
 import by.bashlikovvv.hotelreservation.databinding.FragmentHotelBinding
+import by.bashlikovvv.hotelreservation.databinding.HotelDetailedInfoBinding
+import by.bashlikovvv.hotelreservation.databinding.HotelInfoBinding
+import by.bashlikovvv.hotelreservation.databinding.ImagesListItemBinding
+import by.bashlikovvv.hotelreservation.domain.model.Description
 import by.bashlikovvv.hotelreservation.domain.model.Hotel
-import by.bashlikovvv.hotelreservation.presentation.adapters.ImagesListAdapter
+import by.bashlikovvv.hotelreservation.domain.model.HotelItem
 import by.bashlikovvv.hotelreservation.presentation.contract.SnapOnScrollListener
 import by.bashlikovvv.hotelreservation.presentation.viewmodel.HotelFragmentViewModel
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
+import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
+import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
+import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -30,6 +40,8 @@ import kotlin.math.abs
 
 @AndroidEntryPoint
 class HotelFragment : Fragment() {
+
+    //hotel_detailed_info, hotel_info, fragment_hotel
 
     private val binding: FragmentHotelBinding by viewBinding(createMethod = CreateMethod.INFLATE)
 
@@ -48,39 +60,43 @@ class HotelFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.launch {
-            viewModel.updateVisibility.collect {
-                binding.progressCircular.visibility = if (it.value) {
-                    binding.setVisible()
-                    View.VISIBLE
-                } else {
-                    binding.setInvisible()
-                    View.GONE
-                }
-            }
-        }
+
         viewModel.loadHotel(/*expected id*/0)
+        binding.testFragmentRV.layoutManager = LinearLayoutManager(
+            requireContext(), RecyclerView.VERTICAL, false
+        )
+        val decorator = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
+        decorator.setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.divider)!!)
+        binding.testFragmentRV.addItemDecoration(decorator)
+        viewModel.loadHotel(0)
+        val adapters = ListDelegationAdapter(
+            hotelInfoAdapter(),
+            hotelDetailsInfoAdapter()
+        )
         lifecycleScope.launch {
-            viewModel.hotel.collectLatest {
-                setUpImagesRecyclerView(it)
-                setUpFragment(it)
+            collectProgressBarVisibility()
+        }
+        lifecycleScope.launch {
+            collectHotel(adapters)
+        }
+    }
+
+    private suspend fun collectProgressBarVisibility() {
+        viewModel.updateVisibility.collect {
+            if (it.value) {
+                setVisible()
+            } else {
+                setInvisible()
             }
         }
     }
 
-    private fun setUpFragment(hotel: Hotel) {
-        with(binding) {
-            val starsText = "${hotel.rating} ${hotel.ratingName}"
-            rootLayout.starsText.text = starsText
-            hotelName.text = hotel.name
-            hotelLocation.text = hotel.address
-            hotelPrice.text = getStringRes(R.string.currency, hotel.minimalPrice.toString())
-            additionalTitle.text = hotel.priceForIt
-            hotel.description.peculiarities.forEach {
-                addUsability(it)
-            }
-            hotelDescription.text = hotel.description.description
-            bottomLayout.selectRoomBtn.setOnClickListener {
+    private suspend fun collectHotel(adapters: ListDelegationAdapter<List<HotelItem>>) {
+        viewModel.hotel.collectLatest { hotel ->
+            if (hotel.isEmpty()) return@collectLatest
+            adapters.items = listOf(hotel, hotel.description)
+            binding.testFragmentRV.adapter = adapters
+            binding.include.selectRoomBtn.setOnClickListener {
                 val args = bundleOf(RoomFragment.HOTEL_NAME to hotel.name)
                 findNavController().navigate(
                     resId = R.id.action_hotelFragment_to_roomFragment,
@@ -90,35 +106,95 @@ class HotelFragment : Fragment() {
         }
     }
 
-    private fun setUpImagesRecyclerView(hotel: Hotel) {
-        binding.hotelImages.recyclerView.apply {
-            var idx = 0
-            hotel.imagesUrls.forEach { _ ->
-                addDotIndicator(idx)
-                idx++
+    private fun hotelInfoAdapter(): AdapterDelegate<List<HotelItem>> =
+        adapterDelegateViewBinding<Hotel, HotelItem, HotelInfoBinding>(
+            { layoutInflater, parent ->
+                HotelInfoBinding.inflate(layoutInflater, parent, false)
             }
-            onFlingListener = null
+        ) {
+            binding.imagesRecyclerView.layoutManager = LinearLayoutManager(
+                requireContext(), RecyclerView.HORIZONTAL, false
+            )
+            binding.imagesRecyclerView.onFlingListener = null
             val snapHelper = PagerSnapHelper()
-            snapHelper.attachToRecyclerView(this)
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = ImagesListAdapter().also {
-                it.setImages(hotel.imagesUrls)
+            snapHelper.attachToRecyclerView(binding.imagesRecyclerView)
+
+            bind {
+                binding.imagesRecyclerView.adapter = ListDelegationAdapter(
+                    imagesListAdapter()
+                ).apply { items = item.imagesUrls }
+                var idx = 0
+                repeat(item.imagesUrls.size) {
+                    binding.addDotIndicator(idx)
+                    idx++
+                }
+                binding.imagesRecyclerView.addOnScrollListener(binding.scrollListener(snapHelper, item))
+                val starsText = "${item.rating} ${item.ratingName}"
+                binding.starsText.text = starsText
+                binding.hotelName.text = item.name
+                binding.hotelLocation.text = item.address
+                binding.hotelPrice.text = getString(R.string.currency, item.minimalPrice.toString())
+                binding.additionalTitle.text = item.priceForIt
             }
-            binding.hotelImages.recyclerView.addOnScrollListener(scrollListener(snapHelper, hotel))
         }
+
+    private fun imagesListAdapter(): AdapterDelegate<List<Any>> =
+        adapterDelegateViewBinding<String, Any, ImagesListItemBinding>(
+            { layoutInflater, parent ->
+                ImagesListItemBinding.inflate(layoutInflater, parent, false)
+            }
+        ) {
+            bind {
+                Glide.with(binding.image)
+                    .load(item)
+                    .centerCrop()
+                    .into(binding.image)
+            }
+        }
+
+    private fun hotelDetailsInfoAdapter(): AdapterDelegate<List<HotelItem>> =
+        adapterDelegateViewBinding<Description, HotelItem, HotelDetailedInfoBinding>(
+            { layoutInflater, parent ->
+                HotelDetailedInfoBinding.inflate(layoutInflater, parent, false)
+            }
+        ) {
+            bind {
+                item.peculiarities.onEach {
+                    binding.addUsability(it)
+                }
+                binding.hotelDescription.text = item.description
+            }
+        }
+
+    private fun HotelInfoBinding.addDotIndicator(idx: Int) {
+        val layout = layoutInflater.inflate(
+            R.layout.dot_indicator_item,
+            dotsLinearLayout,
+            false
+        )
+
+        dotsLinearLayout.addView(layout, idx)
     }
 
-    private fun scrollListener(
+    private fun HotelDetailedInfoBinding.addUsability(usability: String) {
+        val layout = layoutInflater.inflate(R.layout.usability_item, chipGroup, false)
+
+        val textView = layout.findViewById<Chip>(R.id.usabilityText)
+        textView.text = usability
+
+        chipGroup.addView(layout)
+    }
+
+    private fun HotelInfoBinding.scrollListener(
         snapHelper: PagerSnapHelper,
         hotel: Hotel
     ) = SnapOnScrollListener(snapHelper) {
         val n = hotel.imagesUrls.size
         for (i in 0 until n) {
             if (i == it) {
-                binding.hotelImages.dotsLinearLayout[it].alpha = 1f
+                dotsLinearLayout[it].alpha = 1f
             } else {
-                binding.hotelImages.dotsLinearLayout[i].alpha = calcAlpha(n, it, i)
+                dotsLinearLayout[i].alpha = calcAlpha(n, it, i)
             }
 
         }
@@ -128,58 +204,15 @@ class HotelFragment : Fragment() {
         return 0.2f + (n - 1 - abs(pos - i)) * (1 - 0.2f) / (n - 1)
     }
 
-    private fun addUsability(usability: String) {
-        val layout = layoutInflater.inflate(R.layout.usability_item, binding.chipGroup, false)
-
-        val textView = layout.findViewById<Chip>(R.id.usabilityText)
-        textView.text = usability
-
-        binding.chipGroup.addView(layout)
+    private fun setVisible() {
+        binding.testFragmentRV.visibility = View.GONE
+        binding.include.selectRoomBtn.visibility = View.GONE
+        binding.progressCircular.visibility = View.VISIBLE
     }
 
-    private fun addDotIndicator(idx: Int) {
-        val layout = layoutInflater.inflate(
-            R.layout.dot_indicator_item,
-            binding.hotelImages.dotsLinearLayout,
-            false
-        )
-
-        binding.hotelImages.dotsLinearLayout.addView(layout, idx)
-    }
-
-    private fun getStringRes(@StringRes resId: Int, data: String): String {
-        return requireContext().getString(resId, data)
-    }
-
-    private fun FragmentHotelBinding.setVisible() {
-        hotelImages.recyclerView.visibility = View.GONE
-        hotelImages.dotsLinearLayout.visibility = View.GONE
-        starsLayout.visibility = View.GONE
-        rootLayout.linearLayout.visibility = View.GONE
-        hotelName.visibility = View.GONE
-        hotelLocation.visibility = View.GONE
-        hotelPrice.visibility = View.GONE
-        additionalTitle.visibility = View.GONE
-        aboutHotel.visibility = View.GONE
-        chipGroup.visibility = View.GONE
-        hotelDescription.visibility = View.GONE
-        hotelInfoLayout.visibility = View.GONE
-        bottomLayout.selectRoomBtn.visibility = View.GONE
-    }
-
-    private fun FragmentHotelBinding.setInvisible() {
-        hotelImages.recyclerView.visibility = View.VISIBLE
-        hotelImages.dotsLinearLayout.visibility = View.VISIBLE
-        starsLayout.visibility = View.VISIBLE
-        rootLayout.linearLayout.visibility = View.VISIBLE
-        hotelName.visibility = View.VISIBLE
-        hotelLocation.visibility = View.VISIBLE
-        hotelPrice.visibility = View.VISIBLE
-        additionalTitle.visibility = View.VISIBLE
-        aboutHotel.visibility = View.VISIBLE
-        chipGroup.visibility = View.VISIBLE
-        hotelDescription.visibility = View.VISIBLE
-        hotelInfoLayout.visibility = View.VISIBLE
-        bottomLayout.selectRoomBtn.visibility = View.VISIBLE
+    private fun setInvisible() {
+        binding.testFragmentRV.visibility = View.VISIBLE
+        binding.include.selectRoomBtn.visibility = View.VISIBLE
+        binding.progressCircular.visibility = View.GONE
     }
 }
