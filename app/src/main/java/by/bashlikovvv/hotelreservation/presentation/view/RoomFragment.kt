@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -18,16 +17,15 @@ import by.bashlikovvv.hotelreservation.presentation.adapters.RoomsListAdapter
 import by.bashlikovvv.hotelreservation.presentation.viewmodel.RoomFragmentViewModel
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@AndroidEntryPoint
 class RoomFragment : Fragment() {
 
     private val binding: FragmentRoomBinding by viewBinding(CreateMethod.INFLATE)
 
-    private val viewModel: RoomFragmentViewModel by viewModels()
+    private val viewModel: RoomFragmentViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

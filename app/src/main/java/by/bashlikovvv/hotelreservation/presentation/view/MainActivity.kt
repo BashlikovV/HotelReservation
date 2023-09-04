@@ -11,9 +11,7 @@ import by.bashlikovvv.hotelreservation.R
 import by.bashlikovvv.hotelreservation.databinding.ActivityMainBinding
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val binding: ActivityMainBinding by viewBinding(createMethod = CreateMethod.INFLATE)

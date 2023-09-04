@@ -6,27 +6,26 @@ import by.bashlikovvv.hotelreservation.domain.repository.IRoomsRepository
 import by.bashlikovvv.hotelreservation.domain.usecase.GetHotelByIdUseCase
 import by.bashlikovvv.hotelreservation.domain.usecase.GetReservationUseCase
 import by.bashlikovvv.hotelreservation.domain.usecase.GetRoomsUseCase
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import org.koin.dsl.module
 
-@Module
-@InstallIn(ViewModelComponent::class)
-class DomainModule {
+val domainModule = module {
 
-    @Provides
-    fun provideGetHotelByIdUseCase(hotelRepository: IHotelRepository): GetHotelByIdUseCase {
-        return GetHotelByIdUseCase(hotelRepository)
+    factory<GetHotelByIdUseCase> {
+        val hotelRepository: IHotelRepository = get()
+
+        GetHotelByIdUseCase(hotelRepository)
     }
 
-    @Provides
-    fun provideGetRoomsUseCase(roomsRepository: IRoomsRepository): GetRoomsUseCase {
-        return GetRoomsUseCase(roomsRepository)
+    factory<GetRoomsUseCase> {
+        val roomsRepository: IRoomsRepository = get()
+
+        GetRoomsUseCase(roomsRepository)
     }
 
-    @Provides
-    fun provideGetReservationUseCase(reservationRepository: IReservationRepository): GetReservationUseCase {
-        return GetReservationUseCase(reservationRepository)
+    factory<GetReservationUseCase> {
+        val reservationRepository: IReservationRepository = get()
+
+        GetReservationUseCase(reservationRepository)
     }
+
 }

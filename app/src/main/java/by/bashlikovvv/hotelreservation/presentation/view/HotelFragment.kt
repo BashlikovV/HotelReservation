@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -33,19 +32,18 @@ import com.google.android.material.chip.Chip
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
 import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.abs
 
-@AndroidEntryPoint
 class HotelFragment : Fragment() {
 
     //hotel_detailed_info, hotel_info, fragment_hotel
 
     private val binding: FragmentHotelBinding by viewBinding(createMethod = CreateMethod.INFLATE)
 
-    private val viewModel: HotelFragmentViewModel by viewModels()
+    private val viewModel: HotelFragmentViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

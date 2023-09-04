@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import by.bashlikovvv.hotelreservation.R
@@ -23,16 +22,15 @@ import by.bashlikovvv.hotelreservation.presentation.viewmodel.ReservationViewMod
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.textfield.TextInputEditText
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@AndroidEntryPoint
 class ReservationFragment : Fragment() {
 
     private val binding: FragmentReservationBinding by viewBinding(CreateMethod.INFLATE)
 
-    private val viewModel: ReservationViewModel by viewModels()
+    private val viewModel: ReservationViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

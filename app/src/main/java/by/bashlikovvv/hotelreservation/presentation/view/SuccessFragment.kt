@@ -1,20 +1,18 @@
 package by.bashlikovvv.hotelreservation.presentation.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import by.bashlikovvv.hotelreservation.R
 import by.bashlikovvv.hotelreservation.databinding.FragmentSuccessBinding
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
-import dagger.hilt.android.AndroidEntryPoint
 import java.util.Random
 
-@AndroidEntryPoint
 class SuccessFragment : Fragment() {
 
     private val binding: FragmentSuccessBinding by viewBinding(createMethod = CreateMethod.INFLATE)
