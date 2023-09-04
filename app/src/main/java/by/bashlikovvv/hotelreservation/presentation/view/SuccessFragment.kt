@@ -22,7 +22,7 @@ class SuccessFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             setHomeAsUpIndicator(R.drawable.navigation_icon)
             title = getString(R.string.success)
@@ -39,6 +39,7 @@ class SuccessFragment : Fragment() {
             text = getString(R.string.super_btn_text)
             setOnClickListener {
                 findNavController().popBackStack(R.id.hotelFragment, true)
+//                findNavController().navigate(R.id.action_successFragment_to_testFragment)
             }
         }
     }
