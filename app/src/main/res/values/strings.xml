@@ -68,4 +68,7 @@
     <string name="hotel">Отель</string>
     <string name="reservation">Бронирование</string>
     <string name="success">Заказ оплачен</string>
+    <string name="order_accepted">Ваш заказ принят в работу</string>
+    <string name="order_text">Подтверждение заказа №%1$s может занять некоторое время (от 1 часа до суток). Как только мы получим ответ от туроператора, вам на почту придет уведомление.</string>
+    <string name="super_btn_text">Супер!</string>
 </resources>
