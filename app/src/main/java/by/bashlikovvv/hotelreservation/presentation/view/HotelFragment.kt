@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -36,7 +38,11 @@ class HotelFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+            setHomeAsUpIndicator(R.drawable.navigation_icon)
+            title = getString(R.string.hotel)
+        }
         return binding.root
     }
 
@@ -75,7 +81,11 @@ class HotelFragment : Fragment() {
             }
             hotelDescription.text = hotel.description.description
             bottomLayout.selectRoomBtn.setOnClickListener {
-                findNavController().navigate(resId = R.id.action_hotelFragment_to_roomFragment)
+                val args = bundleOf(RoomFragment.HOTEL_NAME to hotel.name)
+                findNavController().navigate(
+                    resId = R.id.action_hotelFragment_to_roomFragment,
+                    args = args
+                )
             }
         }
     }
