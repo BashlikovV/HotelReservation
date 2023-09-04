@@ -20,9 +20,11 @@ import by.bashlikovvv.hotelreservation.databinding.FragmentHotelBinding
 import by.bashlikovvv.hotelreservation.databinding.HotelDetailedInfoBinding
 import by.bashlikovvv.hotelreservation.databinding.HotelInfoBinding
 import by.bashlikovvv.hotelreservation.databinding.ImagesListItemBinding
+import by.bashlikovvv.hotelreservation.databinding.NavigationButtonBinding
 import by.bashlikovvv.hotelreservation.domain.model.Description
 import by.bashlikovvv.hotelreservation.domain.model.Hotel
-import by.bashlikovvv.hotelreservation.domain.model.HotelItem
+import by.bashlikovvv.hotelreservation.domain.model.Item
+import by.bashlikovvv.hotelreservation.domain.model.NavigationButton
 import by.bashlikovvv.hotelreservation.presentation.contract.SnapOnScrollListener
 import by.bashlikovvv.hotelreservation.presentation.viewmodel.HotelFragmentViewModel
 import by.kirich1409.viewbindingdelegate.CreateMethod
@@ -69,7 +71,14 @@ class HotelFragment : Fragment() {
         viewModel.loadHotel(0)
         val adapters = ListDelegationAdapter(
             hotelInfoAdapter(),
-            hotelDetailsInfoAdapter()
+            hotelDetailsInfoAdapter(),
+            navigationButtonAdapter {
+                val args = bundleOf(RoomFragment.HOTEL_NAME to it.name)
+                findNavController().navigate(
+                    resId = R.id.action_hotelFragment_to_roomFragment,
+                    args = args
+                )
+            }
         )
         lifecycleScope.launch {
             collectProgressBarVisibility()
@@ -89,33 +98,28 @@ class HotelFragment : Fragment() {
         }
     }
 
-    private suspend fun collectHotel(adapters: ListDelegationAdapter<List<HotelItem>>) {
+    private suspend fun collectHotel(adapters: ListDelegationAdapter<List<Item>>) {
         viewModel.hotel.collectLatest { hotel ->
             if (hotel.isEmpty()) return@collectLatest
-            adapters.items = listOf(hotel, hotel.description)
+            adapters.items = listOf(hotel, hotel.description, NavigationButton(hotel = hotel))
             binding.testFragmentRV.adapter = adapters
-            binding.include.selectRoomBtn.setOnClickListener {
-                val args = bundleOf(RoomFragment.HOTEL_NAME to hotel.name)
-                findNavController().navigate(
-                    resId = R.id.action_hotelFragment_to_roomFragment,
-                    args = args
-                )
-            }
         }
     }
 
-    private fun hotelInfoAdapter(): AdapterDelegate<List<HotelItem>> =
-        adapterDelegateViewBinding<Hotel, HotelItem, HotelInfoBinding>(
+    private fun hotelInfoAdapter(): AdapterDelegate<List<Item>> =
+        adapterDelegateViewBinding<Hotel, Item, HotelInfoBinding>(
             { layoutInflater, parent ->
                 HotelInfoBinding.inflate(layoutInflater, parent, false)
             }
         ) {
-            binding.imagesRecyclerView.layoutManager = LinearLayoutManager(
-                requireContext(), RecyclerView.HORIZONTAL, false
-            )
-            binding.imagesRecyclerView.onFlingListener = null
             val snapHelper = PagerSnapHelper()
-            snapHelper.attachToRecyclerView(binding.imagesRecyclerView)
+            binding.imagesRecyclerView.apply {
+                layoutManager = LinearLayoutManager(
+                    requireContext(), RecyclerView.HORIZONTAL, false
+                )
+                onFlingListener = null
+                snapHelper.attachToRecyclerView(this)
+            }
 
             bind {
                 binding.imagesRecyclerView.adapter = ListDelegationAdapter(
@@ -150,8 +154,8 @@ class HotelFragment : Fragment() {
             }
         }
 
-    private fun hotelDetailsInfoAdapter(): AdapterDelegate<List<HotelItem>> =
-        adapterDelegateViewBinding<Description, HotelItem, HotelDetailedInfoBinding>(
+    private fun hotelDetailsInfoAdapter(): AdapterDelegate<List<Item>> =
+        adapterDelegateViewBinding<Description, Item, HotelDetailedInfoBinding>(
             { layoutInflater, parent ->
                 HotelDetailedInfoBinding.inflate(layoutInflater, parent, false)
             }
@@ -161,6 +165,21 @@ class HotelFragment : Fragment() {
                     binding.addUsability(it)
                 }
                 binding.hotelDescription.text = item.description
+            }
+        }
+
+    private fun navigationButtonAdapter(onClickListener: (Hotel) -> Unit): AdapterDelegate<List<Item>> =
+        adapterDelegateViewBinding<NavigationButton, Item, NavigationButtonBinding>(
+            { layoutInflater, parent ->
+                NavigationButtonBinding.inflate(layoutInflater, parent, false)
+            }
+        ) {
+            binding.selectRoomBtn.setOnClickListener {
+                onClickListener(item.hotel)
+            }
+
+            bind {
+//                binding.selectRoomBtn.text =
             }
         }
 
@@ -204,13 +223,11 @@ class HotelFragment : Fragment() {
 
     private fun setVisible() {
         binding.testFragmentRV.visibility = View.GONE
-        binding.include.selectRoomBtn.visibility = View.GONE
         binding.progressCircular.visibility = View.VISIBLE
     }
 
     private fun setInvisible() {
         binding.testFragmentRV.visibility = View.VISIBLE
-        binding.include.selectRoomBtn.visibility = View.VISIBLE
         binding.progressCircular.visibility = View.GONE
     }
 }

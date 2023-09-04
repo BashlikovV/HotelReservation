@@ -13,12 +13,12 @@ class RoomFragmentViewModel(
     getRoomsUseCase: GetRoomsUseCase
 ) : ViewModel() {
 
-    private var _rooms = MutableStateFlow(HotelFragmentViewModel.OnChange(Rooms()))
+    private var _rooms = MutableStateFlow(Rooms())
     val rooms = _rooms.asStateFlow()
 
     init {
         viewModelScope.launch {
-            _rooms.update { HotelFragmentViewModel.OnChange(getRoomsUseCase.execute()) }
+            _rooms.update { getRoomsUseCase.execute() }
         }
     }
 }
