@@ -69,6 +69,8 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     //Gson
     implementation("com.google.code.gson:gson:2.10.1")
+    //Adapter delegates
+    implementation("com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:4.3.2")
     //Hilt
     implementation("com.google.dagger:hilt-android:2.47")
     kapt("com.google.dagger:hilt-compiler:2.47")
