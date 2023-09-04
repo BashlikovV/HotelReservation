@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -32,6 +33,11 @@ class RoomFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val hotelName = requireArguments().getString(HOTEL_NAME) ?: "unknown"
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+            setHomeAsUpIndicator(R.drawable.navigation_icon)
+            title = hotelName
+        }
         return binding.root
     }
 
@@ -55,5 +61,9 @@ class RoomFragment : Fragment() {
 
     private fun onOpenClickListener() {
         findNavController().navigate(resId = R.id.action_roomFragment_to_reservationFragment)
+    }
+
+    companion object {
+        const val HOTEL_NAME = "hotel_name"
     }
 }

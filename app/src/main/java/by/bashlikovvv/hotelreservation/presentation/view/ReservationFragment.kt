@@ -1,18 +1,19 @@
 package by.bashlikovvv.hotelreservation.presentation.view
 
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Email
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import by.bashlikovvv.hotelreservation.R
 import by.bashlikovvv.hotelreservation.databinding.FragmentReservationBinding
 import by.bashlikovvv.hotelreservation.domain.model.Reservation
@@ -37,6 +38,10 @@ class ReservationFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+            setHomeAsUpIndicator(R.drawable.navigation_icon)
+            title = getString(R.string.reservation)
+        }
         return binding.root
     }
 
@@ -54,7 +59,7 @@ class ReservationFragment : Fragment() {
     private fun setUpEmailEditText() {
         binding.aboutBuyerLayout.emailAddress.apply {
             imeOptions = EditorInfo.IME_ACTION_DONE
-            setOnEditorActionListener { v, actionId, _ ->
+            setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     val flag = android.util.Patterns.EMAIL_ADDRESS.matcher(
                         binding.aboutBuyerLayout.emailAddress.text.toString()
@@ -299,6 +304,17 @@ class ReservationFragment : Fragment() {
 
             binding.bookingInfoLayout.addView(layout)
             idx++
+        }
+        val finalCost = reservation.tourPrice + reservation.fuelCharge + reservation.serviceCharge
+        binding.tourCost.text = getTextRes(R.string.currency, reservation.tourPrice.toString())
+        binding.fuelFee.text = getTextRes(R.string.currency, reservation.fuelCharge.toString())
+        binding.serviceFee.text = getTextRes(R.string.currency, reservation.serviceCharge.toString())
+        binding.toPayment.text = getTextRes(R.string.currency, finalCost.toString())
+        binding.navButton.selectRoomBtn.apply {
+            text = getTextRes(R.string.payment, finalCost.toString())
+            setOnClickListener {
+                findNavController().navigate(R.id.action_reservationFragment_to_successFragment)
+            }
         }
     }
 

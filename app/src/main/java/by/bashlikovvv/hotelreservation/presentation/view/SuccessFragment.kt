@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import by.bashlikovvv.hotelreservation.R
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,6 +16,10 @@ class SuccessFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+            setHomeAsUpIndicator(R.drawable.navigation_icon)
+            title = getString(R.string.success)
+        }
         return inflater.inflate(R.layout.fragment_success, container, false)
     }
 }
