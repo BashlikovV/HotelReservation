@@ -38,6 +38,129 @@
             app:layout_constraintEnd_toEndOf="parent"
             layout="@layout/buyer_info_layout"/>
 
+        <GridLayout
+            android:id="@+id/gridLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:columnCount="2"
+            android:rowCount="5"
+            app:layout_constraintTop_toBottomOf="@id/aboutBuyerLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tour"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:fontFamily="@font/sf_pro_display_bold_400"
+                android:textSize="16sp"
+                android:lineHeight="19.2sp"
+                android:textColor="@color/about_hotel_text"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fuel_fee"
+                android:layout_marginTop="16dp"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:fontFamily="@font/sf_pro_display_bold_400"
+                android:textSize="16sp"
+                android:lineHeight="19.2sp"
+                android:textColor="@color/about_hotel_text"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/service_fee"
+                android:layout_marginTop="16dp"
+                android:layout_row="2"
+                android:layout_column="0"
+                android:fontFamily="@font/sf_pro_display_bold_400"
+                android:textSize="16sp"
+                android:lineHeight="19.2sp"
+                android:textColor="@color/about_hotel_text"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/to_payment"
+                android:layout_marginBottom="26dp"
+                android:layout_row="3"
+                android:layout_column="0"
+                android:fontFamily="@font/sf_pro_display_bold_400"
+                android:textSize="16sp"
+                android:lineHeight="19.2sp"
+                android:textColor="@color/about_hotel_text"/>
+
+            <TextView
+                android:id="@+id/tourCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tour"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:lineHeight="19.2sp"
+                android:fontFamily="@font/sf_pro_display_bold_400"
+                android:textSize="16sp"
+                android:textColor="@color/primary_color"
+                android:layout_gravity="end"/>
+
+            <TextView
+                android:id="@+id/fuel_fee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fuel_fee"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:lineHeight="19.2sp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/sf_pro_display_bold_400"
+                android:textSize="16sp"
+                android:textColor="@color/primary_color"
+                android:layout_gravity="end"/>
+
+            <TextView
+                android:id="@+id/service_fee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/service_fee"
+                android:layout_row="2"
+                android:layout_marginTop="16dp"
+                android:layout_column="1"
+                android:lineHeight="19.2sp"
+                android:fontFamily="@font/sf_pro_display_bold_400"
+                android:textSize="16sp"
+                android:textColor="@color/primary_color"
+                android:layout_gravity="end"/>
+
+            <TextView
+                android:id="@+id/to_payment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/to_payment"
+                android:layout_marginTop="16dp"
+                android:layout_row="3"
+                android:layout_column="1"
+                android:lineHeight="19.2sp"
+                android:fontFamily="@font/sf_pro_display_bold_400"
+                android:textSize="16sp"
+                android:textColor="@color/primary_color"
+                android:layout_gravity="end"/>
+        </GridLayout>
+
+        <include
+            android:id="@+id/navButton"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            layout="@layout/navigation_button"
+            app:layout_constraintTop_toBottomOf="@id/gridLayout"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
         <ProgressBar
             android:id="@+id/progress_circular"
             android:layout_width="wrap_content"
@@ -47,7 +170,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:visibility="gone"/>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
