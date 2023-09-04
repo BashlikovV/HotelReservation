@@ -1,7 +1,7 @@
 package by.bashlikovvv.hotelreservation.domain.model
 
-class Description(
+data class Description(
     val description: String = "",
     val peculiarities: List<String> = emptyList(),
-    id: Long = 0
-) : HotelItem(id)
+    override val id: Long = 0L
+) : Item(id)
