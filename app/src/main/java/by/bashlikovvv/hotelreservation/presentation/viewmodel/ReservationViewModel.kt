@@ -2,9 +2,9 @@ package by.bashlikovvv.hotelreservation.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import by.bashlikovvv.hotelreservation.domain.model.Reservation
-import by.bashlikovvv.hotelreservation.domain.model.TouristInfo
-import by.bashlikovvv.hotelreservation.domain.usecase.GetReservationUseCase
+import by.bashlikovvv.domain.model.Reservation
+import by.bashlikovvv.domain.model.TouristInfo
+import by.bashlikovvv.domain.usecase.GetReservationUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
