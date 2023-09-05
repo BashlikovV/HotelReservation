@@ -10,7 +10,4 @@ data class Hotel(
     val ratingName: String = "",
     val imagesUrls: List<String> = emptyList(),
     val description: Description = Description()
-) : Item(id) {
-
-    fun isEmpty() = name.isEmpty()
-}
+) : Item(id)
