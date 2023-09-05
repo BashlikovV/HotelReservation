@@ -8,8 +8,8 @@ data class TouristInfo(
     var citizenship: String = "",
     var passportNumber: String = "",
     var validityPeriod: String = "",
-    val id: Int = 0
-) {
+    override val id: Long = 0
+): Item(id) {
     fun isEmpty(): Boolean {
         return name.isBlank()
     }
