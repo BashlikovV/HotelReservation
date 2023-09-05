@@ -6,22 +6,30 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import by.bashlikovvv.hotelreservation.R
+import by.bashlikovvv.hotelreservation.databinding.ExpandableContentLayoutBinding
 import by.bashlikovvv.hotelreservation.databinding.FragmentReservationBinding
+import by.bashlikovvv.hotelreservation.domain.model.Item
 import by.bashlikovvv.hotelreservation.domain.model.Reservation
 import by.bashlikovvv.hotelreservation.domain.model.TouristInfo
+import by.bashlikovvv.hotelreservation.presentation.contract.ItemTouchCallback
 import by.bashlikovvv.hotelreservation.presentation.contract.PhoneTextViewListener
 import by.bashlikovvv.hotelreservation.presentation.viewmodel.ReservationViewModel
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.textfield.TextInputEditText
+import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
+import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
+import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -46,7 +54,7 @@ class ReservationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        addProgressBar()
+        collectProgressVisibility()
         addBookingInfo()
 
         setUpPhoneNumberEditText()
@@ -55,19 +63,19 @@ class ReservationFragment : Fragment() {
     }
 
     private fun setUpEmailEditText() {
-        binding.aboutBuyerLayout.emailAddress.apply {
+        binding.emailAddress.apply {
             imeOptions = EditorInfo.IME_ACTION_DONE
             setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     val flag = android.util.Patterns.EMAIL_ADDRESS.matcher(
-                        binding.aboutBuyerLayout.emailAddress.text.toString()
+                        binding.emailAddress.text.toString()
                     ).matches()
                     if (!flag) {
                         val dr = ResourcesCompat.getDrawable(resources, R.drawable.te_error_backgroud, resources.newTheme())
-                        binding.aboutBuyerLayout.emailAddress.background = dr
+                        binding.emailAddress.background = dr
                     } else {
                         val dr = ResourcesCompat.getDrawable(resources, R.drawable.te_background, resources.newTheme())
-                        binding.aboutBuyerLayout.emailAddress.background = dr
+                        binding.emailAddress.background = dr
                     }
                 }
                 true
@@ -76,7 +84,7 @@ class ReservationFragment : Fragment() {
     }
 
     private fun setUpPhoneNumberEditText() {
-        binding.aboutBuyerLayout.phoneNumber.apply {
+        binding.phoneNumber.apply {
             setOnTouchListener { v, _ ->
                 if (text?.contentEquals("") == true) {
                     append(PhoneTextViewListener.INITIAL_VALUE)
@@ -97,14 +105,14 @@ class ReservationFragment : Fragment() {
         }
     }
 
-    private fun addProgressBar() {
+    private fun collectProgressVisibility() {
         lifecycleScope.launch {
             viewModel.updateVisibility.collectLatest {
                 binding.progressCircular.visibility = if (it.value) {
-                    setVisible()
+                    binding.scrollView.visibility = View.GONE
                     View.VISIBLE
                 } else {
-                    setInvisible()
+                    binding.scrollView.visibility = View.VISIBLE
                     View.GONE
                 }
             }
@@ -112,47 +120,48 @@ class ReservationFragment : Fragment() {
     }
 
     private fun addTouristListener() {
+        binding.touristsInfoRV.layoutManager = LinearLayoutManager(
+            requireContext(), RecyclerView.VERTICAL, false
+        )
         val stringArray = resources.getStringArray(R.array.numbers)
-        viewModel.updateFirsTouristName(getTextRes(R.string.tourist_number, stringArray[0]))
+        viewModel.updateFirsTouristName(getString(R.string.tourist_number, stringArray[0]))
 
         lifecycleScope.launch {
-            viewModel.tourists.collectLatest {
-                binding.aboutBuyerLayout.touristsInfoLayout.linearLayout.removeAllViews()
-                it.forEach { touristInfo ->
-                    addTourist(touristInfo)
-                }
+            viewModel.tourists.collectLatest { tourists ->
+                val adapters = ListDelegationAdapter(
+                    touristsInfoAdapter()
+                ).apply { items = tourists }
+                binding.touristsInfoRV.adapter = adapters
             }
         }
 
-        binding.aboutBuyerLayout.touristsInfoLayout.addTouristImage.setOnClickListener {
+        binding.addTouristImage.setOnClickListener {
             val newId = viewModel.getLastTouristId() + 1
             if (newId > stringArray.lastIndex) return@setOnClickListener
             viewModel.addTourist(TouristInfo(
-                name = getTextRes(R.string.tourist_number, stringArray[newId]),
+                name = getString(R.string.tourist_number, stringArray[newId.toInt()]),
                 id = newId
             ))
         }
     }
 
-    private fun addTourist(touristInfo: TouristInfo) {
-        if (touristInfo.isEmpty()) return
-        val layout = layoutInflater.inflate(
-            R.layout.expandable_content_layout,
-            binding.aboutBuyerLayout.touristsInfoLayout.linearLayout,
-            false
-        )
-        layout.findViewById<TextView>(R.id.touristCount).text = touristInfo.name
-        addNameTextChangedListener(layout, touristInfo)
-        addSurnameTextChangedListener(layout, touristInfo)
-        addBirthDateTextChangedListener(layout, touristInfo)
-        addNameCitizenshipTextChangedListener(layout, touristInfo)
-        addPassportNumberTextChangedListener(layout, touristInfo)
-        addValidityPeriodTextChangedListener(layout, touristInfo)
-        binding.aboutBuyerLayout.touristsInfoLayout.linearLayout.addView(
-            layout,
-            touristInfo.id
-        )
-    }
+    private fun touristsInfoAdapter(): AdapterDelegate<List<Item>> =
+        adapterDelegateViewBinding<TouristInfo, Item, ExpandableContentLayoutBinding>(
+            { layoutInflater, parent ->
+                ExpandableContentLayoutBinding.inflate(layoutInflater, parent, false)
+            }
+        ) {
+            bind {
+                if (item.isEmpty()) return@bind
+                binding.touristCount.text = item.name
+                addNameTextChangedListener(binding.expandableLayoutContent, item)
+                addSurnameTextChangedListener(binding.expandableLayoutContent, item)
+                addBirthDateTextChangedListener(binding.expandableLayoutContent, item)
+                addNameCitizenshipTextChangedListener(binding.expandableLayoutContent, item)
+                addPassportNumberTextChangedListener(binding.expandableLayoutContent, item)
+                addValidityPeriodTextChangedListener(binding.expandableLayoutContent, item)
+            }
+        }
 
     private fun addValidityPeriodTextChangedListener(layout: View, touristInfo: TouristInfo) {
         layout.findViewById<TextInputEditText>(R.id.validityPeriod).apply {
@@ -236,7 +245,7 @@ class ReservationFragment : Fragment() {
         var currentValue = PhoneTextViewListener.INITIAL_VALUE
         var currentNew: Char
 
-        aboutBuyerLayout.phoneNumber.addTextChangedListener(
+        phoneNumber.addTextChangedListener(
             PhoneTextViewListener { _, old, new, _ ->
                 val newText = StringBuilder(currentValue)
                 if (new in "0".."9") {
@@ -246,9 +255,9 @@ class ReservationFragment : Fragment() {
                         newText[idx] = currentNew
                         currentValue = newText.toString()
 
-                        aboutBuyerLayout.phoneNumber.setText(newText)
+                        phoneNumber.setText(newText)
                     } else {
-                        aboutBuyerLayout.phoneNumber.setText(newText)
+                        phoneNumber.setText(newText)
                     }
                 }
                 if (old in "0".."9") {
@@ -257,15 +266,15 @@ class ReservationFragment : Fragment() {
                         newText[idx] = PhoneTextViewListener.ASTERISK
                         currentValue = newText.toString()
 
-                        aboutBuyerLayout.phoneNumber.setText(newText)
+                        phoneNumber.setText(newText)
                     } else {
-                        aboutBuyerLayout.phoneNumber.setText(newText)
+                        phoneNumber.setText(newText)
                     }
                 } else {
-                    aboutBuyerLayout.phoneNumber.setText(currentValue)
+                    phoneNumber.setText(currentValue)
                 }
-                val lnp = getLastNumberPosition(aboutBuyerLayout.phoneNumber.text.toString())
-                aboutBuyerLayout.phoneNumber.setSelection(lnp)
+                val lnp = getLastNumberPosition(phoneNumber.text.toString())
+                phoneNumber.setSelection(lnp)
             }
         )
     }
@@ -304,31 +313,15 @@ class ReservationFragment : Fragment() {
             idx++
         }
         val finalCost = reservation.tourPrice + reservation.fuelCharge + reservation.serviceCharge
-        binding.tourCost.text = getTextRes(R.string.currency, reservation.tourPrice.toString())
-        binding.fuelFee.text = getTextRes(R.string.currency, reservation.fuelCharge.toString())
-        binding.serviceFee.text = getTextRes(R.string.currency, reservation.serviceCharge.toString())
-        binding.toPayment.text = getTextRes(R.string.currency, finalCost.toString())
+        binding.tourCost.text = getString(R.string.currency, reservation.tourPrice.toString())
+        binding.fuelFee.text = getString(R.string.currency, reservation.fuelCharge.toString())
+        binding.serviceFee.text = getString(R.string.currency, reservation.serviceCharge.toString())
+        binding.toPayment.text = getString(R.string.currency, finalCost.toString())
         binding.navButton.selectRoomBtn.apply {
-            text = getTextRes(R.string.payment, finalCost.toString())
+            text = getString(R.string.payment, finalCost.toString())
             setOnClickListener {
                 findNavController().navigate(R.id.action_reservationFragment_to_successFragment)
             }
         }
-    }
-
-    private fun getTextRes(@StringRes id: Int, data: String): String {
-        return requireContext().getString(id, data)
-    }
-
-    private fun setVisible() {
-        binding.include.linearLayout.visibility = View.GONE
-        binding.bookingInfoLayout.visibility = View.GONE
-        binding.aboutBuyerLayout.constraintLayout.visibility = View.GONE
-    }
-
-    private fun setInvisible() {
-        binding.include.linearLayout.visibility = View.VISIBLE
-        binding.bookingInfoLayout.visibility = View.VISIBLE
-        binding.aboutBuyerLayout.constraintLayout.visibility = View.VISIBLE
     }
 }

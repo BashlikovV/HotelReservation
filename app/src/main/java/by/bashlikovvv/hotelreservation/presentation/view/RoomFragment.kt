@@ -16,15 +16,14 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import by.bashlikovvv.hotelreservation.R
 import by.bashlikovvv.hotelreservation.databinding.FragmentRoomBinding
-import by.bashlikovvv.hotelreservation.databinding.ImagesListItemBinding
 import by.bashlikovvv.hotelreservation.databinding.RoomInfoBinding
 import by.bashlikovvv.hotelreservation.domain.model.Item
 import by.bashlikovvv.hotelreservation.domain.model.RoomItem
+import by.bashlikovvv.hotelreservation.presentation.adapters.ImagesListAdapter
 import by.bashlikovvv.hotelreservation.presentation.contract.SnapOnScrollListener
 import by.bashlikovvv.hotelreservation.presentation.viewmodel.RoomFragmentViewModel
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
 import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
@@ -55,19 +54,38 @@ class RoomFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.testFragmentRV.layoutManager = LinearLayoutManager(
+        binding.roomFragmentRV.layoutManager = LinearLayoutManager(
             requireContext(), RecyclerView.VERTICAL, false
         )
         val decorator = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
         decorator.setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.divider)!!)
-        binding.testFragmentRV.addItemDecoration(decorator)
+        binding.roomFragmentRV.addItemDecoration(decorator)
         val adapters = ListDelegationAdapter(
             roomsAdapter { onOpenClickListener() }
         )
+        collectRooms(adapters)
+        collectProgressVisibility()
+    }
+
+    private fun collectProgressVisibility() {
+        lifecycleScope.launch {
+            viewModel.updateVisibility.collectLatest {
+                if (it) {
+                    binding.roomFragmentRV.visibility = View.GONE
+                    binding.progressCircular.visibility = View.VISIBLE
+                } else {
+                    binding.roomFragmentRV.visibility = View.VISIBLE
+                    binding.progressCircular.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    private fun collectRooms(adapters: ListDelegationAdapter<List<Item>>) {
         lifecycleScope.launch {
             viewModel.rooms.collectLatest { rooms ->
                 adapters.items = rooms.rooms.filter { !it.isEmpty() }
-                binding.testFragmentRV.adapter = adapters
+                binding.roomFragmentRV.adapter = adapters
             }
         }
     }
@@ -92,7 +110,7 @@ class RoomFragment : Fragment() {
 
             bind {
                 binding.roomImagesRV.adapter = ListDelegationAdapter(
-                    imagesListAdapter()
+                    ImagesListAdapter().imagesListAdapter()
                 ).apply { items = item.imageUrls }
                 var idx = 0
                 repeat(item.imageUrls.size) {
@@ -105,20 +123,6 @@ class RoomFragment : Fragment() {
                 binding.roomName.text = item.name
                 binding.roomPrice.text = getString(R.string.currency, item.price.toString())
                 binding.additionalTitle.text = item.pricePer
-            }
-        }
-
-    private fun imagesListAdapter(): AdapterDelegate<List<Any>> =
-        adapterDelegateViewBinding<String, Any, ImagesListItemBinding>(
-            { layoutInflater, parent ->
-                ImagesListItemBinding.inflate(layoutInflater, parent, false)
-            }
-        ) {
-            bind {
-                Glide.with(binding.image)
-                    .load(item)
-                    .centerCrop()
-                    .into(binding.image)
             }
         }
 

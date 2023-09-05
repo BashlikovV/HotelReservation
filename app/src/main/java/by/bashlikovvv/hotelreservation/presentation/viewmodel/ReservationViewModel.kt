@@ -36,6 +36,15 @@ class ReservationViewModel(
         _tourists.update { newList }
     }
 
+    fun removeTourist(id: Long) {
+        val newList = _tourists.value.filter { it.id != id }
+        _tourists.update { newList }
+    }
+
+    fun getTouristById(id: Long): TouristInfo {
+        return _tourists.value.first { it.id == id }
+    }
+
     fun updateFirsTouristName(name: String) {
         val newList = _tourists.value
         newList[0].name = name
