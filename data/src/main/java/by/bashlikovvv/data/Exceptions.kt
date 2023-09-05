@@ -1,8 +1,6 @@
 package by.bashlikovvv.data
 
-sealed class Exceptions : RuntimeException {
-
-    constructor() : super()
+sealed class Exceptions : RuntimeException() {
 
     class HotelNotFoundException : Exceptions()
 
