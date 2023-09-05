@@ -13,12 +13,20 @@ class RoomFragmentViewModel(
     getRoomsUseCase: GetRoomsUseCase
 ) : ViewModel() {
 
+    private var _updateVisibility: MutableStateFlow<Boolean> = MutableStateFlow(
+        false
+    )
+    val updateVisibility = _updateVisibility.asStateFlow()
+
     private var _rooms = MutableStateFlow(Rooms())
     val rooms = _rooms.asStateFlow()
 
     init {
+        _updateVisibility.update { true }
         viewModelScope.launch {
             _rooms.update { getRoomsUseCase.execute() }
+        }.invokeOnCompletion {
+            _updateVisibility.update { false }
         }
     }
 }

@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.bashlikovvv.hotelreservation.R
@@ -21,6 +21,7 @@ import by.bashlikovvv.hotelreservation.databinding.FragmentReservationBinding
 import by.bashlikovvv.hotelreservation.domain.model.Item
 import by.bashlikovvv.hotelreservation.domain.model.Reservation
 import by.bashlikovvv.hotelreservation.domain.model.TouristInfo
+import by.bashlikovvv.hotelreservation.presentation.contract.ItemTouchCallback
 import by.bashlikovvv.hotelreservation.presentation.contract.PhoneTextViewListener
 import by.bashlikovvv.hotelreservation.presentation.viewmodel.ReservationViewModel
 import by.kirich1409.viewbindingdelegate.CreateMethod
@@ -53,7 +54,7 @@ class ReservationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        addProgressBar()
+        collectProgressVisibility()
         addBookingInfo()
 
         setUpPhoneNumberEditText()
@@ -104,12 +105,14 @@ class ReservationFragment : Fragment() {
         }
     }
 
-    private fun addProgressBar() {
+    private fun collectProgressVisibility() {
         lifecycleScope.launch {
             viewModel.updateVisibility.collectLatest {
                 binding.progressCircular.visibility = if (it.value) {
+                    binding.scrollView.visibility = View.GONE
                     View.VISIBLE
                 } else {
+                    binding.scrollView.visibility = View.VISIBLE
                     View.GONE
                 }
             }
@@ -124,10 +127,10 @@ class ReservationFragment : Fragment() {
         viewModel.updateFirsTouristName(getString(R.string.tourist_number, stringArray[0]))
 
         lifecycleScope.launch {
-            viewModel.tourists.collectLatest {
+            viewModel.tourists.collectLatest { tourists ->
                 val adapters = ListDelegationAdapter(
                     touristsInfoAdapter()
-                ).apply { items = it }
+                ).apply { items = tourists }
                 binding.touristsInfoRV.adapter = adapters
             }
         }

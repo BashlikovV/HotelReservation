@@ -8,6 +8,7 @@
     tools:targetApi="p">
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -288,6 +289,7 @@
                 </GridLayout>
 
                 <include
+                    android:layout_marginBottom="1dp"
                     android:id="@+id/navButton"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
@@ -304,6 +306,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:indeterminateTint="@color/primary_light"
         android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
