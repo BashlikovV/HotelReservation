@@ -72,4 +72,6 @@ dependencies {
     implementation("com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:4.3.2")
     //Koin
     implementation("io.insert-koin:koin-android:3.4.3")
+
+
 }
