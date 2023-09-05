@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import by.bashlikovvv.hotelreservation.R
 import by.bashlikovvv.hotelreservation.databinding.FragmentRoomBinding
 import by.bashlikovvv.hotelreservation.databinding.RoomInfoBinding
-import by.bashlikovvv.hotelreservation.domain.model.Item
-import by.bashlikovvv.hotelreservation.domain.model.RoomItem
+import by.bashlikovvv.domain.model.Item
+import by.bashlikovvv.domain.model.RoomItem
 import by.bashlikovvv.hotelreservation.presentation.adapters.ImagesListAdapter
 import by.bashlikovvv.hotelreservation.presentation.contract.SnapOnScrollListener
 import by.bashlikovvv.hotelreservation.presentation.viewmodel.RoomFragmentViewModel
