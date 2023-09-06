@@ -26,6 +26,9 @@
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <include
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
                     android:id="@+id/starsLayout"
                     layout="@layout/stars_layout" />
 
@@ -138,6 +141,17 @@
                         android:inputType="textEmailAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_agreement"
+                    android:fontFamily="@font/sf_pro_display_bold_400"
+                    android:textColor="@color/about_hotel_text"
+                    android:textSize="14sp"
+                    android:lineHeight="16.8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/touristsInfoRV"
                     android:layout_width="match_parent"
@@ -147,6 +161,7 @@
                     android:id="@+id/touristsInfoCL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
                     android:paddingVertical="8dp">
 
                     <TextView
@@ -284,7 +299,7 @@
                         android:lineHeight="19.2sp"
                         android:fontFamily="@font/sf_pro_display_bold_400"
                         android:textSize="16sp"
-                        android:textColor="@color/primary_color"
+                        android:textColor="@color/primary_light"
                         android:layout_gravity="end"/>
                 </GridLayout>
 

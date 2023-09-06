@@ -9,7 +9,6 @@
     app:chipStartPadding="5dp"
     app:chipEndPadding="5dp"
     app:chipCornerRadius="0dp"
-
     android:backgroundTint="@color/about_hotel_background"
     app:chipMinTouchTargetSize="30dp"
     android:checkable="true"

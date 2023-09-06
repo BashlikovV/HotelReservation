@@ -16,13 +16,14 @@ import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 import kotlin.math.abs
 
-class RoomsListAdapter(
-    private val layoutInflater: LayoutInflater
-) {
+class RoomsListAdapter {
+
+    private lateinit var layoutInflater: LayoutInflater
 
     fun roomsListAdapter(onClickListener: (RoomItem) -> Unit): AdapterDelegate<List<Item>> =
         adapterDelegateViewBinding<RoomItem, Item, RoomInfoBinding>(
             { layoutInflater, parent ->
+                this.layoutInflater = layoutInflater
                 RoomInfoBinding.inflate(layoutInflater, parent, false)
             }
         ) {

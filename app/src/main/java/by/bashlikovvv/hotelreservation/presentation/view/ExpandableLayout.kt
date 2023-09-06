@@ -19,6 +19,8 @@ class ExpandableLayout @JvmOverloads constructor(
     private lateinit var contentLayout: ViewGroup
     private lateinit var arrow: View
 
+    private val listeners = mutableListOf<(Boolean) -> Unit>()
+
     init {
         this.elevation = 0f
     }
@@ -70,7 +72,7 @@ class ExpandableLayout @JvmOverloads constructor(
             arrow.rotation = 0f
         }
 
-        titleView.setOnClickListener {
+        arrow.setOnClickListener {
             expanded = when {
                 animating -> {
                     expandAnimator.reverse()
@@ -85,6 +87,7 @@ class ExpandableLayout @JvmOverloads constructor(
                     true
                 }
             }
+            listeners.onEach { it.invoke(expanded) }
         }
     }
 
@@ -96,5 +99,13 @@ class ExpandableLayout @JvmOverloads constructor(
                 .makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         )
         return measuredHeight
+    }
+
+    fun getExpandAnimator() = this.expandAnimator
+
+    fun isExpanded() = this.expanded
+
+    fun addOnClickListener(listener: (Boolean) -> Unit) {
+        listeners.add(listener)
     }
 }

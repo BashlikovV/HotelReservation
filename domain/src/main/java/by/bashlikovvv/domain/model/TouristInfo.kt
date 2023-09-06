@@ -9,6 +9,7 @@ data class TouristInfo(
     var passportNumber: String = "",
     var validityPeriod: String = "",
     var hasError: Boolean = false,
+    var expanded: Boolean = false,
     override val id: Long = 0
 ): Item(id) {
     fun isEmpty(): Boolean {
