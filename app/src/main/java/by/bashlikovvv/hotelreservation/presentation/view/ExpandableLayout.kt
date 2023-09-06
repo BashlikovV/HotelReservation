@@ -42,7 +42,6 @@ class ExpandableLayout @JvmOverloads constructor(
         }
         addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationStart(animation: Animator) {
-                super.onAnimationStart(animation)
                 animating = true
             }
 
@@ -69,7 +68,6 @@ class ExpandableLayout @JvmOverloads constructor(
                 height = 0
             }
             arrow.rotation = 0f
-
         }
 
         titleView.setOnClickListener {
@@ -78,12 +76,10 @@ class ExpandableLayout @JvmOverloads constructor(
                     expandAnimator.reverse()
                     !expanded
                 }
-
                 expanded -> {
                     expandAnimator.reverse()
                     false
                 }
-
                 else -> {
                     expandAnimator.start()
                     true
@@ -91,14 +87,14 @@ class ExpandableLayout @JvmOverloads constructor(
             }
         }
     }
-}
 
-fun ViewGroup.measureWrapContentHeight(): Int {
-    this.measure(
-        View.MeasureSpec
-            .makeMeasureSpec((this.parent as View).measuredWidth, View.MeasureSpec.EXACTLY),
-        View.MeasureSpec
-            .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-    )
-    return measuredHeight
+    private fun ViewGroup.measureWrapContentHeight(): Int {
+        this.measure(
+            MeasureSpec
+                .makeMeasureSpec((this.parent as View).measuredWidth, MeasureSpec.EXACTLY),
+            MeasureSpec
+                .makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+        )
+        return measuredHeight
+    }
 }

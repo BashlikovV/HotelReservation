@@ -1,5 +1,6 @@
 package by.bashlikovvv.hotelreservation.presentation.view
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +15,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import by.bashlikovvv.hotelreservation.R
-import by.bashlikovvv.hotelreservation.databinding.ExpandableContentLayoutBinding
-import by.bashlikovvv.hotelreservation.databinding.FragmentReservationBinding
 import by.bashlikovvv.domain.model.Item
 import by.bashlikovvv.domain.model.Reservation
 import by.bashlikovvv.domain.model.TouristInfo
+import by.bashlikovvv.hotelreservation.R
+import by.bashlikovvv.hotelreservation.databinding.ExpandableContentLayoutBinding
+import by.bashlikovvv.hotelreservation.databinding.FragmentReservationBinding
 import by.bashlikovvv.hotelreservation.presentation.contract.PhoneTextViewListener
 import by.bashlikovvv.hotelreservation.presentation.viewmodel.ReservationViewModel
 import by.kirich1409.viewbindingdelegate.CreateMethod
@@ -31,6 +32,13 @@ import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.text.StringBuilder
+import kotlin.text.contentEquals
+import kotlin.text.indexOf
+import kotlin.text.isBlank
+import kotlin.text.lastIndex
+import kotlin.text.set
+import kotlin.text.toCharArray
 
 class ReservationFragment : Fragment() {
 
@@ -163,6 +171,7 @@ class ReservationFragment : Fragment() {
 
     private fun addValidityPeriodTextChangedListener(layout: View, touristInfo: TouristInfo) {
         layout.findViewById<TextInputEditText>(R.id.validityPeriod).apply {
+            background = getBackground(touristInfo.hasError && touristInfo.validityPeriod.isBlank())
             text?.append(touristInfo.validityPeriod)
             addTextChangedListener {
                 viewModel.updateTourist(
@@ -170,12 +179,14 @@ class ReservationFragment : Fragment() {
                         validityPeriod = it.toString()
                     )
                 )
+                background = getBackground(touristInfo.hasError && touristInfo.validityPeriod.isBlank())
             }
         }
     }
 
     private fun addPassportNumberTextChangedListener(layout: View, touristInfo: TouristInfo) {
         layout.findViewById<TextInputEditText>(R.id.passportNumber).apply {
+            background = getBackground(touristInfo.hasError && touristInfo.passportNumber.isBlank())
             text?.append(touristInfo.passportNumber)
             addTextChangedListener {
                 viewModel.updateTourist(
@@ -183,12 +194,14 @@ class ReservationFragment : Fragment() {
                         passportNumber = it.toString()
                     )
                 )
+                background = getBackground(touristInfo.hasError && touristInfo.passportNumber.isBlank())
             }
         }
     }
 
     private fun addNameCitizenshipTextChangedListener(layout: View, touristInfo: TouristInfo) {
         layout.findViewById<TextInputEditText>(R.id.citizenship).apply {
+            background = getBackground(touristInfo.hasError && touristInfo.citizenship.isBlank())
             text?.append(touristInfo.citizenship)
             addTextChangedListener {
                 viewModel.updateTourist(
@@ -196,12 +209,14 @@ class ReservationFragment : Fragment() {
                         citizenship = it.toString()
                     )
                 )
+                background = getBackground(touristInfo.hasError && touristInfo.citizenship.isBlank())
             }
         }
     }
 
     private fun addBirthDateTextChangedListener(layout: View, touristInfo: TouristInfo) {
         layout.findViewById<TextInputEditText>(R.id.date_of_birth).apply {
+            background = getBackground(touristInfo.hasError && touristInfo.dateOfBirth.isBlank())
             text?.append(touristInfo.dateOfBirth)
             addTextChangedListener {
                 viewModel.updateTourist(
@@ -209,12 +224,14 @@ class ReservationFragment : Fragment() {
                         dateOfBirth = it.toString()
                     )
                 )
+                background = getBackground(touristInfo.hasError && touristInfo.dateOfBirth.isBlank())
             }
         }
     }
 
     private fun addSurnameTextChangedListener(layout: View, touristInfo: TouristInfo) {
         layout.findViewById<TextInputEditText>(R.id.surname).apply {
+            background = getBackground(touristInfo.hasError && touristInfo.surname.isBlank())
             text?.append(touristInfo.surname)
             addTextChangedListener {
                 viewModel.updateTourist(
@@ -222,12 +239,14 @@ class ReservationFragment : Fragment() {
                         surname = it.toString()
                     )
                 )
+                background = getBackground(touristInfo.hasError && touristInfo.surname.isBlank())
             }
         }
     }
 
     private fun addNameTextChangedListener(layout: View, touristInfo: TouristInfo) {
         layout.findViewById<TextInputEditText>(R.id.name).apply {
+            background = getBackground(touristInfo.hasError && touristInfo.inputName.isBlank())
             text?.append(touristInfo.inputName)
             addTextChangedListener {
                 viewModel.updateTourist(
@@ -235,6 +254,7 @@ class ReservationFragment : Fragment() {
                         inputName = it.toString()
                     )
                 )
+                background = getBackground(touristInfo.hasError && touristInfo.inputName.isBlank())
             }
         }
     }
@@ -317,9 +337,22 @@ class ReservationFragment : Fragment() {
         binding.toPayment.text = getString(R.string.currency, finalCost.toString())
         binding.navButton.selectRoomBtn.apply {
             text = getString(R.string.payment, finalCost.toString())
-            setOnClickListener {
-                findNavController().navigate(R.id.action_reservationFragment_to_successFragment)
-            }
+            setOnClickListener { onClickListener() }
+        }
+    }
+
+    private fun onClickListener() {
+        val idx = viewModel.checkTourists()
+        if (idx == ReservationViewModel.TOURIST_NOT_FOUND) {
+            findNavController().navigate(R.id.action_reservationFragment_to_successFragment)
+        }
+    }
+
+    private fun getBackground(flag: Boolean): Drawable? {
+        return if(flag) {
+            ResourcesCompat.getDrawable(resources, R.drawable.te_error_backgroud, resources.newTheme())
+        } else {
+            ResourcesCompat.getDrawable(resources, R.drawable.te_background, resources.newTheme())
         }
     }
 }
