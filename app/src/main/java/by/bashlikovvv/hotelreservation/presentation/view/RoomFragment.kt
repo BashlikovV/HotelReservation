@@ -47,7 +47,7 @@ class RoomFragment : Fragment() {
             requireContext(), RecyclerView.VERTICAL, false
         )
         val adapters = ListDelegationAdapter(
-            RoomsListAdapter(layoutInflater)
+            RoomsListAdapter()
                 .roomsListAdapter { onOpenClickListener() }
         )
         collectRooms(adapters)

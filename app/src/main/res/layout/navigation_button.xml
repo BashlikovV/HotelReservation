@@ -4,7 +4,6 @@
     android:id="@+id/selectRoomBtn"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="12dp"
     android:background="@drawable/btn_navigation_background"
     android:fontFamily="@font/sf_pro_display_bold_500"
     android:letterSpacing="0.1"

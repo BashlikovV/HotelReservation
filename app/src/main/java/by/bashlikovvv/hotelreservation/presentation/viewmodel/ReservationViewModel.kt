@@ -52,6 +52,7 @@ class ReservationViewModel(
                 it.dateOfBirth = newValue.dateOfBirth
                 it.passportNumber = newValue.passportNumber
                 it.validityPeriod = newValue.validityPeriod
+                it.expanded = newValue.expanded
             }
         }
         _tourists.update { newList }
