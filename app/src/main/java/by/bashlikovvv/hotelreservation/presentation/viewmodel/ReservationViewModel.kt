@@ -59,7 +59,31 @@ class ReservationViewModel(
 
     fun getLastTouristId() = _tourists.value.last().id
 
+    fun checkTourists(): Long {
+        var idx = TOURIST_NOT_FOUND
+        val newList = mutableListOf<TouristInfo>()
+        _tourists.value.forEach {
+            if (!it.isCorrect()) {
+                idx = it.id
+                newList.add(it.copy(hasError = true))
+            } else {
+                if (it.hasError) {
+                    newList.add(it.copy(hasError = false))
+                } else {
+                    newList.add(it)
+                }
+            }
+            _tourists.update { newList }
+        }
+
+        return idx
+    }
+
     private fun setUpdateVisibility(value: Boolean) {
         _updateVisibility.update { HotelFragmentViewModel.OnChange(value) }
+    }
+
+    companion object {
+        const val TOURIST_NOT_FOUND = -1L
     }
 }
