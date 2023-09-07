@@ -45,13 +45,11 @@ dependencies {
     implementation("androidx.core:core-ktx:1.10.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    implementation("androidx.appcompat:appcompat:1.6.1")
 
     //Gson
     implementation("com.google.code.gson:gson:2.10.1")
     // Retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     //Room
     implementation("androidx.room:room-runtime:2.5.2")
     implementation("androidx.room:room-ktx:2.5.2")
