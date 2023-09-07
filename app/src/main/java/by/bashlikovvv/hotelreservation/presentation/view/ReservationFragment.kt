@@ -261,10 +261,14 @@ class ReservationFragment : Fragment() {
         ).matches()
         if (!emailFlag) {
             binding.emailAddress.background = getBackground(true)
+        } else {
+            binding.emailAddress.background = getBackground(false)
         }
         val phoneNumberFlag = binding.phoneNumber.text?.contains("*")
         if (phoneNumberFlag == true || binding.phoneNumber.text?.isBlank() == true) {
             binding.phoneNumber.background = getBackground(true)
+        } else {
+            binding.phoneNumber.background = getBackground(false)
         }
         return phoneNumberFlag == false && emailFlag
     }

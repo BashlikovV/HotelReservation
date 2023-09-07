@@ -36,8 +36,7 @@ class SuccessFragment : Fragment() {
         binding.include.selectRoomBtn.apply {
             text = getString(R.string.super_btn_text)
             setOnClickListener {
-                findNavController().popBackStack(R.id.hotelFragment, true)
-//                findNavController().navigate(R.id.action_successFragment_to_testFragment)
+                findNavController().popBackStack(R.id.hotelFragment, false)
             }
         }
     }
