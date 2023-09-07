@@ -2,8 +2,10 @@ package by.bashlikovvv.hotelreservation.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import by.bashlikovvv.data.CommonException
 import by.bashlikovvv.domain.model.Rooms
 import by.bashlikovvv.domain.usecase.GetRoomsUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -13,9 +15,7 @@ class RoomFragmentViewModel(
     getRoomsUseCase: GetRoomsUseCase
 ) : ViewModel() {
 
-    private var _updateVisibility: MutableStateFlow<Boolean> = MutableStateFlow(
-        false
-    )
+    private var _updateVisibility: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val updateVisibility = _updateVisibility.asStateFlow()
 
     private var _rooms = MutableStateFlow(Rooms())
@@ -23,8 +23,14 @@ class RoomFragmentViewModel(
 
     init {
         _updateVisibility.update { true }
-        viewModelScope.launch {
-            _rooms.update { getRoomsUseCase.execute() }
+        viewModelScope.launch(Dispatchers.IO) {
+            _rooms.update {
+                try {
+                    getRoomsUseCase.execute()
+                } catch (e: CommonException.RoomsNotFoundException) {
+                    Rooms()
+                }
+            }
         }.invokeOnCompletion {
             _updateVisibility.update { false }
         }

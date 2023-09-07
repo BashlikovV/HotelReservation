@@ -2,6 +2,11 @@ package by.bashlikovvv.hotelreservation.di
 
 import android.content.Context
 import android.net.ConnectivityManager
+import androidx.room.Room
+import by.bashlikovvv.data.local.HotelReservationDatabase
+import by.bashlikovvv.data.local.contract.RoomContract
+import by.bashlikovvv.data.local.dao.HotelsDao
+import by.bashlikovvv.data.local.dao.RoomsDao
 import by.bashlikovvv.data.remote.HotelApi
 import by.bashlikovvv.data.remote.ReservationApi
 import by.bashlikovvv.data.remote.RoomsApi
@@ -57,25 +62,45 @@ val dataModule = module {
         retrofit.create(ReservationApi::class.java)
     }
 
+    single<HotelReservationDatabase> {
+        Room.databaseBuilder(
+            context = get(),
+            klass = HotelReservationDatabase::class.java,
+            name = RoomContract.DATABASE_NAME
+        ).build()
+    }
+
+    single<HotelsDao> {
+        val db: HotelReservationDatabase = get()
+
+        db.hotelsDao
+    }
+
+    single<RoomsDao> {
+        val db: HotelReservationDatabase = get()
+
+        db.roomsDao
+    }
+
     single<IHotelRepository> {
         val context: Context = get()
-        val hotelApi: HotelApi = get()
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         HotelRepository(
             cm = connectivityManager,
-            hotelApi = hotelApi
+            hotelApi = get(),
+            hotelsDao = get()
         )
     }
 
     single<IRoomsRepository> {
         val context: Context = get()
-        val roomsApi: RoomsApi = get()
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         RoomsRepository(
             cm = connectivityManager,
-            roomsApi = roomsApi
+            roomsApi = get(),
+            roomsDao = get()
         )
     }
 

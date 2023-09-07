@@ -62,7 +62,7 @@ dependencies {
     //ViewBinding
     implementation("com.github.kirich1409:viewbindingpropertydelegate-full:1.5.9")
     //Glide
-    implementation ("com.github.bumptech.glide:glide:4.15.1")
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
     // Retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
@@ -70,8 +70,8 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
     //Adapter delegates
     implementation("com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:4.3.2")
+    //Room
+    implementation("androidx.room:room-ktx:2.5.2")
     //Koin
     implementation("io.insert-koin:koin-android:3.4.3")
-
-
 }

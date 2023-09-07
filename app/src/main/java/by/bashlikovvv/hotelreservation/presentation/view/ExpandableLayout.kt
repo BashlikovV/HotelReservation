@@ -101,8 +101,6 @@ class ExpandableLayout @JvmOverloads constructor(
         return measuredHeight
     }
 
-    fun getExpandAnimator() = this.expandAnimator
-
     fun isExpanded() = this.expanded
 
     fun addOnClickListener(listener: (Boolean) -> Unit) {

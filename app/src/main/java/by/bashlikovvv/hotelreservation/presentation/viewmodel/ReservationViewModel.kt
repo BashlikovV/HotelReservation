@@ -2,9 +2,11 @@ package by.bashlikovvv.hotelreservation.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import by.bashlikovvv.data.CommonException
 import by.bashlikovvv.domain.model.Reservation
 import by.bashlikovvv.domain.model.TouristInfo
 import by.bashlikovvv.domain.usecase.GetReservationUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -23,9 +25,16 @@ class ReservationViewModel(
     private var _updateVisibility = MutableStateFlow(HotelFragmentViewModel.OnChange(true))
     val updateVisibility = _updateVisibility.asStateFlow()
 
+
     init {
-        viewModelScope.launch {
-            _reservation.update { getReservationUseCase.execute() }
+        viewModelScope.launch(Dispatchers.IO) {
+            _reservation.update {
+                try {
+                    getReservationUseCase.execute()
+                } catch (e: CommonException.ReservationNotFoundException) {
+                    Reservation()
+                }
+            }
         }.invokeOnCompletion { setUpdateVisibility(false) }
     }
 
