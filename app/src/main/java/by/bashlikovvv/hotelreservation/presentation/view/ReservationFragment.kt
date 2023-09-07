@@ -215,14 +215,29 @@ class ReservationFragment : Fragment() {
             idx++
         }
         val finalCost = reservation.tourPrice + reservation.fuelCharge + reservation.serviceCharge
-        binding.tourCost.text = getString(R.string.currency, reservation.tourPrice.toString())
-        binding.fuelFee.text = getString(R.string.currency, reservation.fuelCharge.toString())
-        binding.serviceFee.text = getString(R.string.currency, reservation.serviceCharge.toString())
-        binding.toPayment.text = getString(R.string.currency, finalCost.toString())
+        binding.tourCost.text = getString(R.string.currency, parsePrice(reservation.tourPrice.toString()))
+        binding.fuelFee.text = getString(R.string.currency, parsePrice(reservation.fuelCharge.toString()))
+        binding.serviceFee.text = getString(R.string.currency, parsePrice(reservation.serviceCharge.toString()))
+        binding.toPayment.text = getString(R.string.currency, parsePrice(finalCost.toString()))
         binding.navButton.selectRoomBtn.apply {
-            text = getString(R.string.payment, finalCost.toString())
+            text = getString(R.string.payment, parsePrice(finalCost.toString()))
             setOnClickListener { onClickListener() }
         }
+    }
+
+    private fun parsePrice(price: String): String {
+        val arr = price.toMutableList()
+        var count = 0
+        for (i in arr.lastIndex downTo  0) {
+            if (count == 2 && i != 0) {
+                arr.add(i, ' ')
+                count = -1
+            }
+
+            count++
+        }
+
+        return arr.joinToString("")
     }
 
     private fun onClickListener() {
