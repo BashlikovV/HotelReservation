@@ -91,6 +91,7 @@ class HotelFragment : Fragment() {
             binding.hotelPrice.text = cost
             binding.additionalTitle.text = hotel.priceForIt
             binding.hotelDescription.text = hotel.description.description
+            binding.hotelName.text = hotel.name
             val starsText = "${hotel.rating} ${hotel.ratingName}"
             binding.starsText.text = starsText
         }

@@ -223,6 +223,7 @@ class ReservationFragment : Fragment() {
             text = getString(R.string.payment, parsePrice(finalCost.toString()))
             setOnClickListener { onClickListener() }
         }
+        binding.hotelName.text = reservation.hotelName
     }
 
     private fun parsePrice(price: String): String {
