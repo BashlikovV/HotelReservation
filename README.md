@@ -8,4 +8,5 @@
 - [Glide](https://github.com/bumptech/glide);
 - [Retrofit](https://github.com/square/retrofit);
 - [Gson](https://github.com/google/gson);
-- [Koin](https://github.com/InsertKoinIO/koin).
+- [Koin](https://github.com/InsertKoinIO/koin);
+- Room.
