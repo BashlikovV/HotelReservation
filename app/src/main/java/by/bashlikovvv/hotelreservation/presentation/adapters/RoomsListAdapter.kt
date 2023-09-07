@@ -50,12 +50,27 @@ class RoomsListAdapter {
                 }
                 binding.roomImagesRV.addOnScrollListener(binding.scrollListener(snapHelper, item))
                 item.peculiarities.onEach { binding.addUsability(it) }
-                binding.navLayout.selectRoomBtn.text = getString(R.string.about_room, "")
+                binding.navLayout.selectRoomBtn.text = getString(R.string.choose_number)
                 binding.roomName.text = item.name
-                binding.roomPrice.text = getString(R.string.currency, item.price.toString())
+                binding.roomPrice.text = getString(R.string.currency, parsePrice(item.price.toString()))
                 binding.additionalTitle.text = item.pricePer
             }
         }
+
+    private fun parsePrice(price: String): String {
+        val arr = price.toMutableList()
+        var count = 0
+        for (i in arr.lastIndex downTo  0) {
+            if (count == 2 && i != 0) {
+                arr.add(i, ' ')
+                count = -1
+            }
+
+            count++
+        }
+
+        return arr.joinToString("")
+    }
 
     private fun RoomInfoBinding.addDotIndicator(idx: Int) {
         val layout = layoutInflater.inflate(

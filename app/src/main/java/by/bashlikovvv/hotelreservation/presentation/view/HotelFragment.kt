@@ -13,9 +13,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import by.bashlikovvv.domain.model.Hotel
 import by.bashlikovvv.hotelreservation.R
 import by.bashlikovvv.hotelreservation.databinding.FragmentHotelBinding
-import by.bashlikovvv.domain.model.Hotel
 import by.bashlikovvv.hotelreservation.presentation.adapters.ImagesListAdapter
 import by.bashlikovvv.hotelreservation.presentation.contract.SnapOnScrollListener
 import by.bashlikovvv.hotelreservation.presentation.viewmodel.HotelFragmentViewModel
@@ -58,6 +58,7 @@ class HotelFragment : Fragment() {
         binding.navButton.selectRoomBtn.setOnClickListener {
             onClickListener(viewModel.hotel.value)
         }
+        binding.navButton.selectRoomBtn.text = getString(R.string.to_choose_number)
     }
 
     private fun onClickListener(hotel: Hotel) {
@@ -86,7 +87,28 @@ class HotelFragment : Fragment() {
             hotel.description.peculiarities.onEach {
                 binding.addUsability(it)
             }
+            val cost = getString(R.string.currency, parsePrice(hotel.minimalPrice.toString()))
+            binding.hotelPrice.text = cost
+            binding.additionalTitle.text = hotel.priceForIt
+            binding.hotelDescription.text = hotel.description.description
+            val starsText = "${hotel.rating} ${hotel.ratingName}"
+            binding.starsText.text = starsText
         }
+    }
+
+    private fun parsePrice(price: String): String {
+        val arr = price.toMutableList()
+        var count = 0
+        for (i in arr.lastIndex downTo  0) {
+            if (count == 2 && i != 0) {
+                arr.add(i, ' ')
+                count = -1
+            }
+
+            count++
+        }
+
+        return arr.joinToString("")
     }
 
 

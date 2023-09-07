@@ -15,7 +15,8 @@
     <string name="included_description">Самое необходимое</string>
     <string name="excluded">Что не включено</string>
     <string name="excluded_description">Самое необходимое</string>
-    <string name="choose_number">К выбору номера</string>
+    <string name="choose_number">Выбрать номер</string>
+    <string name="to_choose_number">К выбору номера</string>
     <string name="image_for_presenting_hotel">image for presenting hotel</string>
     <string name="madinat_makadi_safaga_road_makadi_bay">Madinat Makadi, Safaga Road, Makadi Bay, Египет</string>
     <string name="open_content">open content</string>

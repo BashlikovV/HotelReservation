@@ -24,6 +24,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -74,4 +75,6 @@ dependencies {
     implementation("androidx.room:room-ktx:2.5.2")
     //Koin
     implementation("io.insert-koin:koin-android:3.4.3")
+
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12")
 }
