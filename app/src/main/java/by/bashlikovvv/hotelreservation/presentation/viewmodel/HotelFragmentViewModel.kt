@@ -2,8 +2,10 @@ package by.bashlikovvv.hotelreservation.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import by.bashlikovvv.data.CommonException
 import by.bashlikovvv.domain.model.Hotel
 import by.bashlikovvv.domain.usecase.GetHotelByIdUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -21,8 +23,14 @@ class HotelFragmentViewModel(
 
     fun loadHotel(id: Long) {
         _updateVisibility.update { OnChange(true) }
-        val job = viewModelScope.launch {
-            _hotel.update { getHotelByIdUseCase.execute(id) }
+        val job = viewModelScope.launch(Dispatchers.IO) {
+            _hotel.update {
+                try {
+                    getHotelByIdUseCase.execute(id)
+                } catch (e: CommonException.HotelNotFoundException) {
+                    Hotel()
+                }
+            }
         }
         job.invokeOnCompletion {
             _updateVisibility.update { OnChange(false) }
