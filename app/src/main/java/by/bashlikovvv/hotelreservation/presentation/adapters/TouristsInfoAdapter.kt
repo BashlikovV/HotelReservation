@@ -18,14 +18,12 @@ class TouristsInfoAdapter(
     private val context: Context,
     private val updateTouristCallback: (TouristInfo) -> Unit
 ) {
-
     fun touristsInfoAdapter(): AdapterDelegate<List<Item>> =
         adapterDelegateViewBinding<TouristInfo, Item, ExpandableContentLayoutBinding>(
             { layoutInflater, parent ->
                 ExpandableContentLayoutBinding.inflate(layoutInflater, parent, false)
             }
         ) {
-
             bind {
                 if (item.isEmpty()) return@bind
                 if (item.expanded != binding.expandableLayout.isExpanded()) {

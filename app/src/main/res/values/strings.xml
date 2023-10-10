@@ -51,6 +51,11 @@
         <item>Восьмой</item>
         <item>Девятый</item>
         <item>Десятый</item>
+        <item>Одинадцатый</item>
+        <item>Двенадцатый</item>
+        <item>Тренадцатый</item>
+        <item>Четырнадцатый</item>
+        <item>Пятнадцатый</item>
     </string-array>
     <string name="tourist_number">%1$s турист</string>
     <string name="name">Имя</string>
