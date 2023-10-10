@@ -43,7 +43,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
 
-    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -54,12 +54,12 @@ dependencies {
     //RecyclerView
     implementation("androidx.recyclerview:recyclerview:1.3.1")
     //ViewModel architecture component
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     //Fragment
     implementation("androidx.fragment:fragment-ktx:1.6.1")
     //Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.1")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.1")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.4")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.4")
     //ViewBinding
     implementation("com.github.kirich1409:viewbindingpropertydelegate-full:1.5.9")
     //Glide
@@ -74,7 +74,5 @@ dependencies {
     //Room
     implementation("androidx.room:room-ktx:2.5.2")
     //Koin
-    implementation("io.insert-koin:koin-android:3.4.3")
-
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12")
+    implementation("io.insert-koin:koin-android:3.5.0")
 }
