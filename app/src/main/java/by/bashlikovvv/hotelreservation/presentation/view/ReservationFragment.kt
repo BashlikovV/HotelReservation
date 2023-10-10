@@ -144,51 +144,15 @@ class ReservationFragment : Fragment() {
     }
 
     private fun FragmentReservationBinding.addTextChangedListener() {
-        var currentValue = PhoneTextViewListener.INITIAL_VALUE
-        var currentNew: Char
-
-        phoneNumber.addTextChangedListener(
-            PhoneTextViewListener { _, old, new, _ ->
-                val newText = StringBuilder(currentValue)
-                if (new in "0".."9") {
-                    currentNew = new.toCharArray().first()
-                    val idx = newText.indexOf(PhoneTextViewListener.ASTERISK)
-                    if (idx != -1) {
-                        newText[idx] = currentNew
-                        currentValue = newText.toString()
-
-                        phoneNumber.setText(newText)
-                    } else {
-                        phoneNumber.setText(newText)
-                    }
-                }
-                if (old in "0".."9") {
-                    val idx = getLastNumberPosition(newText.toString()) - 1
-                    if (idx != -1) {
-                        newText[idx] = PhoneTextViewListener.ASTERISK
-                        currentValue = newText.toString()
-
-                        phoneNumber.setText(newText)
-                    } else {
-                        phoneNumber.setText(newText)
-                    }
-                } else {
-                    phoneNumber.setText(currentValue)
-                }
-                val lnp = getLastNumberPosition(phoneNumber.text.toString())
+        viewModel.setPhoneCurrentValue(PhoneTextViewListener.INITIAL_VALUE)
+        lifecycleScope.launch {
+            viewModel.phoneValue.collectLatest {
+                phoneNumber.setText(it.newText)
+                val lnp = viewModel.getLastNumberPosition(phoneNumber.text.toString())
                 phoneNumber.setSelection(lnp)
             }
-        )
-    }
-
-    private fun getLastNumberPosition(str: String): Int {
-        for (i in str.lastIndex downTo 0) {
-            if (i > 3 && str[i] in '0'..'9') {
-                return i + 1
-            }
         }
-
-        return 4
+        phoneNumber.addTextChangedListener(viewModel.phoneTextChangedListener())
     }
 
     private fun setBookingInfo(reservation: Reservation) {

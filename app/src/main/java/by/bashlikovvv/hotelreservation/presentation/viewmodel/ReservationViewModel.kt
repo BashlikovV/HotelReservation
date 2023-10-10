@@ -1,11 +1,14 @@
 package by.bashlikovvv.hotelreservation.presentation.viewmodel
 
+import android.text.TextWatcher
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.bashlikovvv.data.CommonException
+import by.bashlikovvv.domain.model.Phone
 import by.bashlikovvv.domain.model.Reservation
 import by.bashlikovvv.domain.model.TouristInfo
 import by.bashlikovvv.domain.usecase.GetReservationUseCase
+import by.bashlikovvv.hotelreservation.presentation.contract.PhoneTextViewListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,6 +24,9 @@ class ReservationViewModel(
 
     private var _tourists = MutableStateFlow(listOf(TouristInfo(id = 0)))
     val tourists = _tourists.asStateFlow()
+
+    private var _phoneValue = MutableStateFlow(Phone())
+    val phoneValue = _phoneValue.asStateFlow()
 
     private var _updateVisibility = MutableStateFlow(HotelFragmentViewModel.OnChange(true))
     val updateVisibility = _updateVisibility.asStateFlow()
@@ -89,8 +95,59 @@ class ReservationViewModel(
         return idx
     }
 
+    fun setPhoneCurrentValue(newCurrentValue: String) {
+        _phoneValue.update { it.copy(currentValue = newCurrentValue, newText = newCurrentValue) }
+    }
+
+    fun phoneTextChangedListener(): TextWatcher {
+        return PhoneTextViewListener { _, old, new, _ ->
+            val newText = StringBuilder(_phoneValue.value.currentValue)
+            if (new in "0".."9") {
+                _phoneValue.update { it.copy(currentNew = new.toCharArray().first()) }
+                val idx = newText.indexOf(PhoneTextViewListener.ASTERISK)
+                if (idx != -1) {
+                    newText[idx] = _phoneValue.value.currentNew
+                    _phoneValue.update {
+                        it.copy(
+                            currentValue = newText.toString(),
+                            newText = newText.toString()
+                        )
+                    }
+                } else {
+                    _phoneValue.update { it.copy(newText = newText.toString()) }
+                }
+            }
+            if (old in "0".."9") {
+                val idx = getLastNumberPosition(newText.toString()) - 1
+                if (idx != -1) {
+                    newText[idx] = PhoneTextViewListener.ASTERISK
+                    _phoneValue.update {
+                        it.copy(
+                            currentValue = newText.toString(),
+                            newText = newText.toString()
+                        )
+                    }
+                } else {
+                    _phoneValue.update { it.copy(newText = newText.toString()) }
+                }
+            } else {
+                _phoneValue.update { it.copy(newText = _phoneValue.value.currentValue) }
+            }
+        }
+    }
+
     private fun setUpdateVisibility(value: Boolean) {
         _updateVisibility.update { HotelFragmentViewModel.OnChange(value) }
+    }
+
+    fun getLastNumberPosition(str: String): Int {
+        for (i in str.lastIndex downTo 0) {
+            if (i > 3 && str[i] in '0'..'9') {
+                return i + 1
+            }
+        }
+
+        return 4
     }
 
     companion object {
