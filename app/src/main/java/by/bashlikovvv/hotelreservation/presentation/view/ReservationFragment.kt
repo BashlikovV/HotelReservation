@@ -119,16 +119,18 @@ class ReservationFragment : Fragment() {
         )
         val stringArray = resources.getStringArray(R.array.numbers)
         viewModel.updateFirsTouristName(getString(R.string.tourist_number, stringArray[0]))
+        val adapters = ListDelegationAdapter(
+            TouristsInfoAdapter(
+                context = requireContext(),
+                updateTouristCallback = { viewModel.updateTourist(it) }
+            ).touristsInfoAdapter()
+        )
+        binding.touristsInfoRV.adapter = adapters
 
         lifecycleScope.launch {
             viewModel.tourists.collectLatest { tourists ->
-                val adapters = ListDelegationAdapter(
-                    TouristsInfoAdapter(
-                        context = requireContext(),
-                        updateTouristCallback = { viewModel.updateTourist(it) }
-                    ).touristsInfoAdapter()
-                ).apply { items = tourists }
-                binding.touristsInfoRV.adapter = adapters
+                adapters.items = tourists
+                adapters.notifyItemChanged(adapters.items?.indexOf(tourists.last()) ?: 0)
             }
         }
 
