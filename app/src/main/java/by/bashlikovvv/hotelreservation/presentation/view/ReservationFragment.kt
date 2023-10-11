@@ -1,6 +1,5 @@
 package by.bashlikovvv.hotelreservation.presentation.view
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -144,15 +143,41 @@ class ReservationFragment : Fragment() {
     }
 
     private fun FragmentReservationBinding.addTextChangedListener() {
-        viewModel.setPhoneCurrentValue(PhoneTextViewListener.INITIAL_VALUE)
-        lifecycleScope.launch {
-            viewModel.phoneValue.collectLatest {
-                phoneNumber.setText(it.newText)
+        var currentValue = viewModel.phoneValue.value.currentValue
+        var currentNew: Char
+
+        phoneNumber.addTextChangedListener(
+            PhoneTextViewListener { _, old, new, _ ->
+                val newText = StringBuilder(currentValue)
+                if (new in "0".."9") {
+                    currentNew = new.toCharArray().first()
+                    val idx = newText.indexOf(PhoneTextViewListener.ASTERISK)
+                    if (idx != -1) {
+                        newText[idx] = currentNew
+                        currentValue = newText.toString()
+
+                        phoneNumber.setText(newText)
+                    } else {
+                        phoneNumber.setText(newText)
+                    }
+                }
+                if (old in "0".."9") {
+                    val idx = viewModel.getLastNumberPosition(newText.toString()) - 1
+                    if (idx != -1) {
+                        newText[idx] = PhoneTextViewListener.ASTERISK
+                        currentValue = newText.toString()
+
+                        phoneNumber.setText(newText)
+                    } else {
+                        phoneNumber.setText(newText)
+                    }
+                } else {
+                    phoneNumber.setText(currentValue)
+                }
                 val lnp = viewModel.getLastNumberPosition(phoneNumber.text.toString())
                 phoneNumber.setSelection(lnp)
             }
-        }
-        phoneNumber.addTextChangedListener(viewModel.phoneTextChangedListener())
+        )
     }
 
     private fun setBookingInfo(reservation: Reservation) {
@@ -190,6 +215,11 @@ class ReservationFragment : Fragment() {
         binding.hotelName.text = reservation.hotelName
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        viewModel.updatePhone(binding.phoneNumber.text.toString())
+    }
+
     private fun parsePrice(price: String): String {
         val arr = price.toMutableList()
         var count = 0
@@ -206,34 +236,11 @@ class ReservationFragment : Fragment() {
     }
 
     private fun onClickListener() {
-        if (checkPhoneAndEmail() && viewModel.checkTourists() == ReservationViewModel.TOURIST_NOT_FOUND) {
+        if (
+            viewModel.checkPhoneAndEmail(binding, resources) && viewModel.checkTourists() ==
+            ReservationViewModel.TOURIST_NOT_FOUND
+            ) {
             findNavController().navigate(R.id.action_reservationFragment_to_successFragment)
         }
-    }
-
-    private fun getBackground(flag: Boolean): Drawable? {
-        return if(flag) {
-            ResourcesCompat.getDrawable(resources, R.drawable.te_error_backgroud, resources.newTheme())
-        } else {
-            ResourcesCompat.getDrawable(resources, R.drawable.te_background, resources.newTheme())
-        }
-    }
-
-    private fun checkPhoneAndEmail(): Boolean {
-        val emailFlag = android.util.Patterns.EMAIL_ADDRESS.matcher(
-            binding.emailAddress.text.toString()
-        ).matches()
-        if (!emailFlag) {
-            binding.emailAddress.background = getBackground(true)
-        } else {
-            binding.emailAddress.background = getBackground(false)
-        }
-        val phoneNumberFlag = binding.phoneNumber.text?.contains("*")
-        if (phoneNumberFlag == true || binding.phoneNumber.text?.isBlank() == true) {
-            binding.phoneNumber.background = getBackground(true)
-        } else {
-            binding.phoneNumber.background = getBackground(false)
-        }
-        return phoneNumberFlag == false && emailFlag
     }
 }
