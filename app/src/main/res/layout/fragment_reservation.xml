@@ -155,7 +155,11 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/touristsInfoRV"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="vertical"
+                    tools:listitem="@layout/expandable_content_layout"
+                    tools:itemCount="1"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/touristsInfoCL"
