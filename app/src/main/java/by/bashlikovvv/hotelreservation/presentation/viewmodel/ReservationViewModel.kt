@@ -1,6 +1,8 @@
 package by.bashlikovvv.hotelreservation.presentation.viewmodel
 
-import android.text.TextWatcher
+import android.content.res.Resources
+import android.graphics.drawable.Drawable
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.bashlikovvv.data.CommonException
@@ -8,6 +10,8 @@ import by.bashlikovvv.domain.model.Phone
 import by.bashlikovvv.domain.model.Reservation
 import by.bashlikovvv.domain.model.TouristInfo
 import by.bashlikovvv.domain.usecase.GetReservationUseCase
+import by.bashlikovvv.hotelreservation.R
+import by.bashlikovvv.hotelreservation.databinding.FragmentReservationBinding
 import by.bashlikovvv.hotelreservation.presentation.contract.PhoneTextViewListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +29,9 @@ class ReservationViewModel(
     private var _tourists = MutableStateFlow(listOf(TouristInfo(id = 0)))
     val tourists = _tourists.asStateFlow()
 
-    private var _phoneValue = MutableStateFlow(Phone())
+    private var _phoneValue = MutableStateFlow(Phone(
+        currentValue = PhoneTextViewListener.INITIAL_VALUE
+    ))
     val phoneValue = _phoneValue.asStateFlow()
 
     private var _updateVisibility = MutableStateFlow(HotelFragmentViewModel.OnChange(true))
@@ -95,44 +101,36 @@ class ReservationViewModel(
         return idx
     }
 
-    fun setPhoneCurrentValue(newCurrentValue: String) {
-        _phoneValue.update { it.copy(currentValue = newCurrentValue, newText = newCurrentValue) }
+    fun checkPhoneAndEmail(
+        binding: FragmentReservationBinding,
+        resources: Resources
+    ): Boolean {
+        val emailFlag = android.util.Patterns.EMAIL_ADDRESS.matcher(
+            binding.emailAddress.text.toString()
+        ).matches()
+        if (!emailFlag) {
+            binding.emailAddress.background = resources.getBackground(true)
+        } else {
+            binding.emailAddress.background = resources.getBackground(false)
+        }
+        val phoneNumberFlag = binding.phoneNumber.text?.contains("*")
+        if (phoneNumberFlag == true || binding.phoneNumber.text?.isBlank() == true) {
+            binding.phoneNumber.background = resources.getBackground(true)
+        } else {
+            binding.phoneNumber.background = resources.getBackground(false)
+        }
+        return phoneNumberFlag == false && emailFlag
     }
 
-    fun phoneTextChangedListener(): TextWatcher {
-        return PhoneTextViewListener { _, old, new, _ ->
-            val newText = StringBuilder(_phoneValue.value.currentValue)
-            if (new in "0".."9") {
-                _phoneValue.update { it.copy(currentNew = new.toCharArray().first()) }
-                val idx = newText.indexOf(PhoneTextViewListener.ASTERISK)
-                if (idx != -1) {
-                    newText[idx] = _phoneValue.value.currentNew
-                    _phoneValue.update {
-                        it.copy(
-                            currentValue = newText.toString(),
-                            newText = newText.toString()
-                        )
-                    }
-                } else {
-                    _phoneValue.update { it.copy(newText = newText.toString()) }
-                }
-            }
-            if (old in "0".."9") {
-                val idx = getLastNumberPosition(newText.toString()) - 1
-                if (idx != -1) {
-                    newText[idx] = PhoneTextViewListener.ASTERISK
-                    _phoneValue.update {
-                        it.copy(
-                            currentValue = newText.toString(),
-                            newText = newText.toString()
-                        )
-                    }
-                } else {
-                    _phoneValue.update { it.copy(newText = newText.toString()) }
-                }
-            } else {
-                _phoneValue.update { it.copy(newText = _phoneValue.value.currentValue) }
-            }
+    fun updatePhone(newValue: String) {
+        _phoneValue.update { Phone(newValue) }
+    }
+
+    private fun Resources.getBackground(flag: Boolean): Drawable? {
+        return if(flag) {
+            ResourcesCompat.getDrawable(this, R.drawable.te_error_backgroud, newTheme())
+        } else {
+            ResourcesCompat.getDrawable(this, R.drawable.te_background, newTheme())
         }
     }
 
