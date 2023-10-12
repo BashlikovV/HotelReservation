@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import by.bashlikovvv.data.CommonException
 import by.bashlikovvv.domain.model.Phone
 import by.bashlikovvv.domain.model.Reservation
+import by.bashlikovvv.domain.model.ReservationStates
 import by.bashlikovvv.domain.model.TouristInfo
 import by.bashlikovvv.domain.usecase.GetReservationUseCase
 import by.bashlikovvv.hotelreservation.R
@@ -20,7 +21,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ReservationViewModel(
-    getReservationUseCase: GetReservationUseCase
+    private val getReservationUseCase: GetReservationUseCase
 ) : ViewModel() {
 
     private var _reservation = MutableStateFlow(Reservation())
@@ -34,16 +35,27 @@ class ReservationViewModel(
     ))
     val phoneValue = _phoneValue.asStateFlow()
 
-    private var _updateVisibility = MutableStateFlow(HotelFragmentViewModel.OnChange(true))
-    val updateVisibility = _updateVisibility.asStateFlow()
+    private var _reservationStates = MutableStateFlow(ReservationStates())
+    val reservationStates = _reservationStates.asStateFlow()
 
 
     init {
+        loadReservation()
+    }
+
+    fun loadReservation() {
         viewModelScope.launch(Dispatchers.IO) {
+            setUpdateVisibility(true)
+            setErrorVisibility(false)
             _reservation.update {
                 try {
-                    getReservationUseCase.execute()
+                    val reservation = getReservationUseCase.execute()
+                    setErrorVisibility(false)
+
+                    reservation
                 } catch (e: CommonException.ReservationNotFoundException) {
+                    setErrorVisibility(true)
+
                     Reservation()
                 }
             }
@@ -135,7 +147,11 @@ class ReservationViewModel(
     }
 
     private fun setUpdateVisibility(value: Boolean) {
-        _updateVisibility.update { HotelFragmentViewModel.OnChange(value) }
+        _reservationStates.update { it.copy(updateVisibility = value) }
+    }
+
+    private fun setErrorVisibility(value: Boolean) {
+        _reservationStates.update { it.copy(errorVisibility = value) }
     }
 
     fun getLastNumberPosition(str: String): Int {

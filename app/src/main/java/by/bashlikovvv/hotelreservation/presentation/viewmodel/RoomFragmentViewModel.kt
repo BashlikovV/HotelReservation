@@ -28,7 +28,7 @@ class RoomFragmentViewModel(
                 try {
                     getRoomsUseCase.execute()
                 } catch (e: CommonException.RoomsNotFoundException) {
-                    Rooms()
+                    it
                 }
             }
         }.invokeOnCompletion {
