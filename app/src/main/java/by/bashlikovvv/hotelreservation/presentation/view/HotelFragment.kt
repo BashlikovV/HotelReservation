@@ -38,10 +38,13 @@ class HotelFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
+
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             setHomeAsUpIndicator(R.drawable.navigation_icon)
             title = getString(R.string.hotel)
         }
+
         return binding.root
     }
 
