@@ -9,10 +9,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,10 +39,13 @@ class ReservationFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
+
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             setHomeAsUpIndicator(R.drawable.navigation_icon)
             title = getString(R.string.reservation)
         }
+
         return binding.root
     }
 
@@ -274,14 +275,6 @@ class ReservationFragment : Fragment() {
     }
 
     private fun onNavigateBack() {
-        lifecycleScope.launch {
-            viewModel.reservation.collectLatest {
-                findNavController().navigate(
-                    resId = R.id.action_reservationFragment_to_roomFragment,
-                    args = bundleOf(RoomFragment.HOTEL_NAME to it.hotelName),
-                    navOptions = NavOptions.Builder().setPopUpTo(R.id.roomFragment, true).build()
-                )
-            }
-        }
+        findNavController().popBackStack()
     }
 }
