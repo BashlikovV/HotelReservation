@@ -37,5 +37,6 @@ class HotelFragmentViewModel(
         }
     }
 
-    class OnChange<T>(val value: T)
+    @JvmInline
+    value class OnChange<T>(val value: T)
 }
