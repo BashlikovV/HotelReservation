@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.HotelReservation" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:background">
@@ -49,5 +49,14 @@
     <style name="MyNavBtnTheme" parent="ThemeOverlay.AppCompat">
         <item name="colorAccent">@color/primary_light</item>
         <item name="colorPrimary">@color/primary_light</item>
+    </style>
+
+    <style name="MyAlertDialogStyle" parent="ThemeOverlay.Material3.MaterialAlertDialog.Centered">
+        <item name="android:textColor">@color/primary_color</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textFontWeight" tools:targetApi="p">400</item>
+        <item name="android:fontFamily">@font/sf_pro_display_bold_400</item>
+        <item name="android:titleTextColor">@color/primary_color</item>
+        <item name="android:titleTextStyle">@font/sf_pro_display_bold_500</item>
     </style>
 </resources>
