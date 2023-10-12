@@ -6,10 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -101,17 +104,41 @@ class ReservationFragment : Fragment() {
 
     private fun collectProgressVisibility() {
         lifecycleScope.launch {
-            viewModel.updateVisibility.collectLatest {
-                binding.progressCircular.visibility = if (it.value) {
+            viewModel.reservationStates.collectLatest { reservationStates ->
+                binding.progressCircular.visibility = if (reservationStates.updateVisibility) {
                     binding.scrollView.visibility = View.GONE
                     View.VISIBLE
                 } else {
                     binding.scrollView.visibility = View.VISIBLE
                     View.GONE
                 }
+                val alertDialog = networkExceptionAlertDialog()
+                if (reservationStates.errorVisibility) {
+                    alertDialog.show()
+                } else {
+                    alertDialog.cancel()
+                }
             }
         }
     }
+
+    private fun networkExceptionAlertDialog() = AlertDialog.Builder(
+        this@ReservationFragment.requireContext(), R.style.MyAlertDialogStyle
+    )
+        .setTitle("Network error")
+        .setMessage("You can not load reservation without internet connection!")
+        .setPositiveButton(
+            R.string.alert_dialog_positive_btn_text
+        ) { dialogInterface, _ ->
+            dialogInterface.cancel()
+            viewModel.loadReservation()
+        }
+        .setNegativeButton(
+            R.string.alert_dialog_negative_btn_text
+        ) { dialogInterface, _ ->
+            dialogInterface.cancel()
+            onNavigateBack()
+        }.create()
 
     private fun addTouristListener() {
         binding.touristsInfoRV.layoutManager = LinearLayoutManager(
@@ -243,6 +270,18 @@ class ReservationFragment : Fragment() {
             ReservationViewModel.TOURIST_NOT_FOUND
             ) {
             findNavController().navigate(R.id.action_reservationFragment_to_successFragment)
+        }
+    }
+
+    private fun onNavigateBack() {
+        lifecycleScope.launch {
+            viewModel.reservation.collectLatest {
+                findNavController().navigate(
+                    resId = R.id.action_reservationFragment_to_roomFragment,
+                    args = bundleOf(RoomFragment.HOTEL_NAME to it.hotelName),
+                    navOptions = NavOptions.Builder().setPopUpTo(R.id.roomFragment, true).build()
+                )
+            }
         }
     }
 }
