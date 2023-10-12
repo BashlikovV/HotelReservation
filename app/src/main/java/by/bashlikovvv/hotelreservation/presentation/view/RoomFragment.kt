@@ -29,14 +29,18 @@ class RoomFragment : Fragment() {
     private val viewModel: RoomFragmentViewModel by viewModel()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
+
         val hotelName = requireArguments().getString(HOTEL_NAME) ?: "unknown"
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             setHomeAsUpIndicator(R.drawable.navigation_icon)
             title = hotelName
         }
+
         return binding.root
     }
 
