@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_reservationFragment_to_successFragment"
             app:destination="@id/successFragment" />
+        <action
+            android:id="@+id/action_reservationFragment_to_roomFragment"
+            app:destination="@id/roomFragment" />
     </fragment>
     <fragment
         android:id="@+id/successFragment"
