@@ -78,4 +78,6 @@
     <string name="order_text">Подтверждение заказа №%1$s может занять некоторое время (от 1 часа до суток). Как только мы получим ответ от туроператора, вам на почту придет уведомление.</string>
     <string name="super_btn_text">Супер!</string>
     <string name="user_agreement">Эти данные никому не передаются. После оплаты мы вышли чек на указанный вами номер и почту</string>
+    <string name="alert_dialog_positive_btn_text">Try again</string>
+    <string name="alert_dialog_negative_btn_text">Back</string>
 </resources>
