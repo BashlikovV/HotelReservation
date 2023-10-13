@@ -57,7 +57,7 @@ class RoomsRepository(
         }
     }
 
-    private fun getRoomsOffline(): Rooms {
+    private suspend fun getRoomsOffline(): Rooms {
         val roomEntities = roomsDao.selectRooms()
         val roomsEntityMapper = RoomEntityMapper()
 

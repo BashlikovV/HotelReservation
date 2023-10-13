@@ -19,7 +19,6 @@ class HotelRepository(
     private val hotelApi: HotelApi,
     private val hotelsDao: HotelsDao
 ) : IHotelRepository {
-
     /**
      * @id - an assumed id identifying the hotel
      * @throws CommonException.HotelNotFoundException when [HotelDto] is null

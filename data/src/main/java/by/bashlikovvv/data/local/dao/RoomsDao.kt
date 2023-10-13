@@ -11,8 +11,8 @@ import by.bashlikovvv.data.local.model.RoomsItemEntity
 interface RoomsDao {
 
     @Query("SELECT * FROM ${RoomsTable.TABLE_NAME}")
-    fun selectRooms(): List<RoomsItemEntity?>?
+    suspend fun selectRooms(): List<RoomsItemEntity?>?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertRooms(roomEntities: List<RoomsItemEntity>)
+    suspend fun insertRooms(roomEntities: List<RoomsItemEntity>)
 }

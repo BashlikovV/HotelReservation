@@ -44,6 +44,7 @@ class ExpandableLayout @JvmOverloads constructor(
         }
         addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationStart(animation: Animator) {
+                super.onAnimationStart(animation)
                 animating = true
             }
 
